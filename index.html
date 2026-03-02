@@ -342,7 +342,14 @@ tbody tr:hover td{background:#FAFCFF}
 .lt-company{background:#FEF3C7;color:#92400E;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
 .lt-agency{background:#EDE9FE;color:#5B21B6;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
 
-/* ── MEMBERSHIP TIERS ── */
+/* ── PUSH NOTIFICATION PERMISSION BANNER ── */
+#push-banner{position:fixed;bottom:80px;right:16px;z-index:8000;background:#1C3252;color:#fff;border-radius:14px;padding:14px 16px;max-width:300px;box-shadow:0 8px 32px rgba(10,22,40,.35);border:1px solid rgba(255,255,255,.1);display:none;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+#push-banner .pb-title{font-weight:700;font-size:13px;margin-bottom:5px}
+#push-banner .pb-sub{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:12px;line-height:1.5}
+#push-banner .pb-btns{display:flex;gap:7px}
+#push-banner .pb-ok{flex:1;padding:8px;background:var(--sky);border:none;border-radius:8px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit}
+#push-banner .pb-no{flex:1;padding:8px;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:rgba(255,255,255,.7);font-size:12px;cursor:pointer;font-family:inherit}
 .tier{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
 .tier-none{background:#F1F5F9;color:#94A3B8;border:1px solid #E2E8F0}
 .tier-bronze{background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#92400E;border:1px solid #FCD34D}
@@ -366,6 +373,16 @@ tbody tr:hover td{background:#FAFCFF}
 </style>
 </head>
 <body>
+
+<!-- ══ PUSH NOTIFICATION BANNER ══════════════════ -->
+<div id="push-banner">
+  <div class="pb-title">🔔 Bật thông báo CRM</div>
+  <div class="pb-sub">Nhận thông báo ngay khi có lead mới, nhắc resale & sinh nhật khách hàng!</div>
+  <div class="pb-btns">
+    <button class="pb-ok" onclick="enablePush()">✅ Bật ngay</button>
+    <button class="pb-no" onclick="dismissPush()">Để sau</button>
+  </div>
+</div>
 
 <!-- ══ DEMO GATE ══════════════════════════════════ -->
 <div id="demo-gate" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0A1628 0%,#1C3252 50%,#0A1628 100%);display:flex;align-items:center;justify-content:center;font-family:'Sora',system-ui,sans-serif">
@@ -739,7 +756,7 @@ tbody tr:hover td{background:#FAFCFF}
           <div class="card-title">Danh sách tài khoản</div>
           <div class="sbar" style="max-width:200px"><span class="sbar-ico">🔍</span><input id="user-q" placeholder="Tìm..." oninput="renderUsers()"></div>
         </div>
-        <div class="tbl-wrap"><table><thead><tr><th>Nhân Viên</th><th>Username</th><th>Vai Trò</th><th>Tour PT</th><th>TT</th><th>Tạo</th><th>Đăng nhập</th><th></th></tr></thead><tbody id="users-tbl"></tbody></table></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Nhân Viên</th><th>Username</th><th>Vai Trò</th><th>SĐT / Zalo</th><th>Tour PT</th><th>TT</th><th>Đăng nhập</th><th></th></tr></thead><tbody id="users-tbl"></tbody></table></div>
       </div>
     </div>
 
@@ -854,6 +871,62 @@ tbody tr:hover td{background:#FAFCFF}
 
       <div style="text-align:right">
         <button class="btn btn-sky" onclick="saveSettings()">💾 Lưu Cài Đặt</button>
+      </div>
+
+      <!-- PUSH NOTIFICATION CONFIG -->
+      <div class="set-section">
+        <div class="set-title">🔔 Thông Báo Trình Duyệt</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+          <div id="push-status-badge" style="font-size:12px;padding:6px 12px;border-radius:100px;font-weight:600"></div>
+          <button class="btn btn-sky btn-sm" onclick="testBrowserPush()">🧪 Test thông báo</button>
+          <button class="btn btn-ghost btn-sm" onclick="enablePush()">🔔 Bật thông báo</button>
+        </div>
+        <div style="font-size:11px;color:var(--ink4);line-height:1.8">
+          ✅ <b>Lead mới</b> — popup ngay khi thêm lead<br>
+          ✅ <b>Chốt deal</b> — thông báo khi cập nhật "Đã chốt"<br>
+          ✅ <b>Nhắc resale</b> — hiện lên khi đăng nhập nếu có lịch hôm nay<br>
+          ✅ <b>Sinh nhật</b> — nhắc ngay khi đăng nhập có khách sinh nhật hôm nay
+        </div>
+      </div>
+      <div class="set-section" style="margin-top:14px">
+        <div class="set-title">🟦 Cấu Hình Zalo ZNS</div>
+        <div style="background:var(--sky-ll);border-radius:9px;padding:11px 14px;font-size:12px;color:var(--sky-d);margin-bottom:16px;line-height:1.7">
+          💡 Điền thông tin sau khi có <b>Zalo OA Access Token</b> và <b>Template ZNS được duyệt</b>.<br>
+          Chưa có → <a href="https://developers.zalo.me" target="_blank" style="color:var(--sky);font-weight:700">developers.zalo.me</a> để đăng ký.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:14px">
+          <div class="fg">
+            <label>OA Access Token</label>
+            <input id="zns-token" type="password" placeholder="Dán Access Token vào đây" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;width:100%">
+          </div>
+          <div class="fg">
+            <label>OA ID</label>
+            <input id="zns-oaid" placeholder="VD: 1234567890" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;width:100%">
+          </div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--ink3);margin-bottom:10px">Template ID (sau khi được Zalo duyệt)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px">
+          <div class="fg">
+            <label>📋 Lead mới</label>
+            <input id="zns-tpl-lead" placeholder="VD: 123456" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;width:100%">
+          </div>
+          <div class="fg">
+            <label>🔔 Nhắc resale</label>
+            <input id="zns-tpl-resale" placeholder="VD: 123457" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;width:100%">
+          </div>
+          <div class="fg">
+            <label>🎂 Sinh nhật</label>
+            <input id="zns-tpl-bday" placeholder="VD: 123458" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;width:100%">
+          </div>
+        </div>
+        <!-- ZNS Status per user -->
+        <div style="font-size:12px;font-weight:700;color:var(--ink3);margin-bottom:10px">Trạng Thái ZNS Từng Sale</div>
+        <div id="zns-user-status" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="testZNS()">🧪 Test gửi noti</button>
+          <button class="btn btn-sky btn-sm" onclick="saveZNS()">💾 Lưu ZNS Config</button>
+        </div>
+        <div id="zns-result" style="margin-top:10px;font-size:12px"></div>
       </div>
     </div>
 
@@ -1084,6 +1157,7 @@ tbody tr:hover td{background:#FAFCFF}
       </div>
       <div class="fg"><label>Email</label><input id="u-email" type="email"></div>
       <div class="fg"><label>SĐT</label><input id="u-phone" type="tel"></div>
+      <div class="fg"><label>🟦 SĐT Zalo <small style="font-weight:400;color:var(--ink4)">(nhận noti)</small></label><input id="u-zalo" type="tel" placeholder="Số Zalo (nếu khác SĐT)"></div>
       <div class="fg fc2"><label>Trạng Thái</label><select id="u-status"><option value="active">✅ Hoạt động</option><option value="locked">🔒 Khóa</option></select></div>
     </div>
     <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-user')">Hủy</button><button class="btn btn-sky" id="u-save-btn" onclick="saveUser()">Tạo User →</button></div></div>
@@ -1245,11 +1319,11 @@ let MKT = [
 ];
 
 let USERS = [
-  {id:'u1',name:'Vitgia',username:'cmo',role:'admin',email:'admin@hanoiskytours.com',phone:'0900000001',tours:[],status:'active',created:'01/01/2025',lastLogin:'27/02/2025'},
-  {id:'u2',name:'Minh Sale',username:'minh',role:'sale',email:'minh@hanoiskytours.com',phone:'0901111111',tours:['Tour Đà Lạt 3N2Đ','Tour Hội An 2N1Đ','Tour Hạ Long 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'27/02/2025'},
-  {id:'u3',name:'Lan Sale',username:'lan',role:'sale',email:'lan@hanoiskytours.com',phone:'0902222222',tours:['Tour Phú Quốc 4N3Đ','Tour Sapa 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'26/02/2025'},
-  {id:'u4',name:'Tuấn Sale',username:'tuan',role:'sale',email:'tuan@hanoiskytours.com',phone:'0903333333',tours:['Tour Nha Trang 4N3Đ'],status:'active',created:'20/01/2025',lastLogin:'25/02/2025'},
-  {id:'u5',name:'Chat FB',username:'chat',role:'chat',email:'chat@hanoiskytours.com',phone:'0904444444',tours:[],status:'active',created:'01/02/2025',lastLogin:'27/02/2025'}
+  {id:'u1',name:'Vitgia',username:'cmo',role:'admin',email:'admin@hanoiskytours.com',phone:'0900000001',zalo:'0900000001',tours:[],status:'active',created:'01/01/2025',lastLogin:'27/02/2025'},
+  {id:'u2',name:'Minh Sale',username:'minh',role:'sale',email:'minh@hanoiskytours.com',phone:'0901111111',zalo:'',tours:['Tour Đà Lạt 3N2Đ','Tour Hội An 2N1Đ','Tour Hạ Long 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'27/02/2025'},
+  {id:'u3',name:'Lan Sale',username:'lan',role:'sale',email:'lan@hanoiskytours.com',phone:'0902222222',zalo:'',tours:['Tour Phú Quốc 4N3Đ','Tour Sapa 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'26/02/2025'},
+  {id:'u4',name:'Tuấn Sale',username:'tuan',role:'sale',email:'tuan@hanoiskytours.com',phone:'0903333333',zalo:'',tours:['Tour Nha Trang 4N3Đ'],status:'active',created:'20/01/2025',lastLogin:'25/02/2025'},
+  {id:'u5',name:'Chat FB',username:'chat',role:'chat',email:'chat@hanoiskytours.com',phone:'0904444444',zalo:'',tours:[],status:'active',created:'01/02/2025',lastLogin:'27/02/2025'}
 ];
 
 // ══════════════════════════════════════════════════
@@ -1398,6 +1472,9 @@ function doLogin(){
   refreshSaleDD();
   renderLeads(); renderStats(); renderReminders();
   toast('👋 Chào '+CU.name+'!');
+  // Init push notifications
+  PUSH.init();
+  PUSH.checkDaily();
 }
 
 function showLogout(){$('lout-box').classList.toggle('on')}
@@ -1688,6 +1765,10 @@ function saveLead(){
   });
   // Tạo/cập nhật customer record
   ensureCustomer(LEADS[0]);
+  // Bắn ZNS noti cho sale phụ trách
+  sendZNSNewLead(LEADS[0]);
+  // Browser push notification
+  PUSH.newLead(LEADS[0]);
   closeModal('m-new-lead');
   renderLeads(); renderStats();
   toast('✅ Đã thêm: '+name);
@@ -1845,6 +1926,8 @@ function saveStatus(){
       if(pts>0){addPoints(l.phone,pts,l.tour,'earn');l._pointsAwarded=true;
         toast(`⭐ Cộng ${pts} điểm cho ${l.name}!`);}
     }
+    // Push notification chốt deal
+    if(prevStatus!=='Đã chốt') PUSH.dealClosed(l);
   }
 
   // Ghi nhận resale lần này
@@ -2431,9 +2514,18 @@ function renderUsers(){
         <div style="font-size:11px;color:var(--ink4)">${u.email||'—'}</div></div></div></td>
       <td><code style="background:var(--bg);padding:2px 7px;border-radius:5px;font-size:12px">${u.username}</code></td>
       <td><span class="badge ${rl[u.role]||'bgray'}">${rn[u.role]||u.role}</span></td>
+      <td>
+        <div style="font-size:12px">${u.phone||'—'}</div>
+        ${u.zalo
+          ? `<div style="display:flex;align-items:center;gap:4px;margin-top:3px">
+               <span style="font-size:10px;background:#E8F4FD;color:#0068FF;padding:1px 6px;border-radius:4px;font-weight:700;border:1px solid #BAD9F5">🟦 ${u.zalo}</span>
+               <span style="font-size:9px;color:var(--green);font-weight:600">✓ ZNS</span>
+             </div>`
+          : `<div style="font-size:10px;color:var(--ink4);margin-top:2px">⚠️ Chưa có Zalo</div>`
+        }
+      </td>
       <td style="font-size:11px;color:var(--ink4)">${u.tours.length?u.tours.map(t=>t.replace('Tour ','')).join(', '):u.role==='admin'?'Tất cả':'—'}</td>
       <td>${u.status==='active'?'<span class="badge bg">● Active</span>':'<span class="badge br">● Locked</span>'}</td>
-      <td style="font-size:11px;color:var(--ink4)">${u.created}</td>
       <td style="font-size:11px;color:var(--ink4)">${u.lastLogin||'—'}</td>
       <td><div style="display:flex;gap:3px">
         <button class="act" onclick="openEditUser('${u.id}')">✏️</button>
@@ -2445,7 +2537,7 @@ function renderUsers(){
 }
 function openNewUser(){
   EDIT_UID=null; $('um-title').textContent='Tạo User Mới'; $('u-save-btn').textContent='Tạo User →';
-  ['u-name','u-uname','u-pass','u-pass2','u-email','u-phone'].forEach(i=>$(i).value='');
+  ['u-name','u-uname','u-pass','u-pass2','u-email','u-phone','u-zalo'].forEach(i=>$(i).value='');
   $('u-role').value='sale'; $('u-status').value='active';
   $('u-tw').style.display='block';
   Array.from($('u-tours').options).forEach(o=>o.selected=false);
@@ -2457,6 +2549,7 @@ function openEditUser(uid){
   $('u-name').value=u.name; $('u-uname').value=u.username;
   $('u-pass').value=''; $('u-pass2').value='';
   $('u-email').value=u.email||''; $('u-phone').value=u.phone||'';
+  $('u-zalo').value=u.zalo||'';
   $('u-role').value=u.role; $('u-status').value=u.status;
   $('u-tw').style.display=u.role==='sale'?'block':'none';
   Array.from($('u-tours').options).forEach(o=>o.selected=u.tours.includes(o.value));
@@ -2473,12 +2566,12 @@ function saveUser(){
   const role=$('u-role').value;
   if(!EDIT_UID){
     if(USERS.find(u=>u.username===uname)){toast('Username đã tồn tại','err');return}
-    USERS.push({id:'u'+Date.now(),name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,tours,status:$('u-status').value,created:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),lastLogin:'—'});
+    USERS.push({id:'u'+Date.now(),name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,zalo:$('u-zalo').value.trim(),tours,status:$('u-status').value,created:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),lastLogin:'—'});
     toast('✅ Đã tạo: '+name);
   } else {
     if(USERS.find(u=>u.username===uname&&u.id!==EDIT_UID)){toast('Username đã tồn tại','err');return}
     const u=USERS.find(x=>x.id===EDIT_UID);
-    Object.assign(u,{name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,tours,status:$('u-status').value});
+    Object.assign(u,{name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,zalo:$('u-zalo').value.trim(),tours,status:$('u-status').value});
     toast('✅ Đã cập nhật: '+name);
   }
   closeModal('m-user'); renderUsers(); refreshSaleDD();
@@ -2503,7 +2596,133 @@ function saveChPw(){
 }
 
 // ══════════════════════════════════════════════════
-// LOYALTY — THÀNH VIÊN
+// PUSH NOTIFICATION (Browser)
+// ══════════════════════════════════════════════════
+const PUSH = {
+  permission: 'default',
+  supported: 'Notification' in window,
+
+  init(){
+    if(!this.supported) return;
+    this.permission = Notification.permission;
+    // Nếu chưa quyết định → hiện banner sau 3 giây
+    if(this.permission === 'default'){
+      setTimeout(()=>{ if(CU) this.showBanner(); }, 3000);
+    }
+  },
+
+  showBanner(){
+    const b = document.getElementById('push-banner');
+    if(b && localStorage.getItem('push_dismissed') !== '1'){
+      b.style.display = 'block';
+    }
+  },
+
+  async enable(){
+    if(!this.supported) return false;
+    try {
+      const result = await Notification.requestPermission();
+      this.permission = result;
+      return result === 'granted';
+    } catch(e){ return false; }
+  },
+
+  send(title, body, options={}){
+    if(!this.supported || this.permission !== 'granted') return;
+    try {
+      const n = new Notification(title, {
+        body,
+        icon: options.icon || '✈️',
+        badge: options.badge || '',
+        tag: options.tag || 'skycrm-' + Date.now(),
+        requireInteraction: options.sticky || false,
+        silent: false,
+        ...options
+      });
+      // Auto đóng sau 6 giây (trừ sticky)
+      if(!options.sticky) setTimeout(()=>n.close(), 6000);
+      n.onclick = function(){
+        window.focus();
+        if(options.page) showPage(options.page);
+        n.close();
+      };
+    } catch(e){}
+  },
+
+  // Các loại thông báo
+  newLead(lead){
+    this.send(
+      '🆕 Lead mới — ' + lead.name,
+      `📞 ${lead.phone}\n🗺 ${lead.tour}\n📡 ${lead.source||'—'}`,
+      { tag:'new-lead-'+lead.id, page:'leads' }
+    );
+  },
+
+  dealClosed(lead){
+    this.send(
+      '🎉 Chốt deal! — ' + lead.name,
+      `💰 ${(lead.value||0).toLocaleString('vi-VN')}đ\n🗺 ${lead.tour}`,
+      { tag:'closed-'+lead.id, page:'leads', sticky:true }
+    );
+  },
+
+  birthday(customer){
+    this.send(
+      '🎂 Sinh nhật hôm nay — ' + customer.name,
+      `📞 ${customer.phone}\n⭐ ${customer.points||0} điểm · ${getTier(customer.totalPoints||0)?.label||'Chưa có hạng'}`,
+      { tag:'bday-'+customer.phone, page:'reminders', sticky:true }
+    );
+  },
+
+  reminder(lead){
+    this.send(
+      '🔔 Nhắc resale — ' + lead.name,
+      `📞 ${lead.phone}\n🗺 ${lead.tour}\nNgày nhắc: ${lead.remindDate}`,
+      { tag:'remind-'+lead.id, page:'reminders' }
+    );
+  },
+
+  // Kiểm tra nhắc lịch & sinh nhật mỗi khi load
+  checkDaily(){
+    if(this.permission !== 'granted') return;
+    const today = new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+
+    // Nhắc resale hôm nay
+    const reminds = LEADS.filter(l=>l.remindDate===today);
+    if(reminds.length){
+      setTimeout(()=>{
+        this.send(
+          `🔔 ${reminds.length} khách cần liên hệ hôm nay`,
+          reminds.slice(0,3).map(l=>l.name).join(', ') + (reminds.length>3?'...':''),
+          { tag:'daily-remind', page:'reminders', sticky:true }
+        );
+      }, 1500);
+    }
+
+    // Sinh nhật hôm nay
+    const bdays = Object.values(CUSTOMERS).filter(c=>c.birthday&&isBdayToday(c.birthday));
+    bdays.forEach((c,i)=>{
+      setTimeout(()=>this.birthday(c), 2500 + i*800);
+    });
+  }
+};
+
+function enablePush(){
+  PUSH.enable().then(granted=>{
+    dismissPush();
+    if(granted){
+      toast('✅ Đã bật thông báo trình duyệt!');
+      PUSH.send('✅ Sky CRM — Thông báo đã bật!','Bạn sẽ nhận thông báo về lead mới, nhắc resale & sinh nhật khách hàng.',{tag:'test-enable',sticky:false});
+    } else {
+      toast('⚠️ Trình duyệt không cho phép thông báo','err');
+    }
+  });
+}
+function dismissPush(){
+  const b=document.getElementById('push-banner');
+  if(b) b.style.display='none';
+  localStorage.setItem('push_dismissed','1');
+}
 // ══════════════════════════════════════════════════
 function renderLoyaltyStats(){
   const custs=Object.values(CUSTOMERS);
@@ -2619,8 +2838,153 @@ function exportLoyalty(){
   toast('📥 Xuất thành viên xong');
 }
 
-// ══════════════════════════════════════════════════
-// SETTINGS
+// ── ZNS CONFIG ──
+let ZNS_CFG = {
+  token: '',
+  oaId: '',
+  templates: { lead: '', resale: '', bday: '' }
+};
+
+function testBrowserPush(){
+  if(!PUSH.supported){toast('Trình duyệt không hỗ trợ thông báo','err');return}
+  if(PUSH.permission!=='granted'){enablePush();return}
+  PUSH.send('🧪 Test thông báo Sky CRM','Hệ thống thông báo hoạt động bình thường! Lead mới, sinh nhật & nhắc resale sẽ hiện như thế này.',{tag:'push-test',sticky:false});
+  toast('✅ Đã gửi test notification!');
+}
+
+function updatePushStatusBadge(){
+  const el=$('push-status-badge'); if(!el)return;
+  if(!PUSH.supported){
+    el.style.background='#F1F5F9';el.style.color='#64748B';
+    el.textContent='⚠️ Trình duyệt không hỗ trợ';
+  } else if(PUSH.permission==='granted'){
+    el.style.background='#D1FAE5';el.style.color='#065F46';
+    el.textContent='✅ Đã bật — Đang hoạt động';
+  } else if(PUSH.permission==='denied'){
+    el.style.background='#FEE2E2';el.style.color='#991B1B';
+    el.textContent='❌ Đã bị chặn — Vào Settings trình duyệt để bật lại';
+  } else {
+    el.style.background='#FEF3C7';el.style.color='#92400E';
+    el.textContent='⏸ Chưa bật — Nhấn "Bật thông báo"';
+  }
+}
+
+function renderZNSStatus(){
+  const el=$('zns-user-status'); if(!el)return;
+  const sales=USERS.filter(u=>u.role==='sale'||u.role==='admin');
+  el.innerHTML=sales.map(u=>`
+    <div style="display:flex;align-items:center;gap:7px;padding:8px 12px;background:var(--bg);border-radius:9px;border:1px solid ${u.zalo?'#BAD9F5':'var(--border)'}">
+      <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#0EA5E9,#0284C7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">${u.name[0]}</div>
+      <div>
+        <div style="font-size:12px;font-weight:600">${u.name}</div>
+        ${u.zalo
+          ? `<div style="font-size:10px;color:var(--green)">✅ 🟦 ${u.zalo} — Sẵn sàng nhận ZNS</div>`
+          : `<div style="font-size:10px;color:var(--orange)">⚠️ Chưa có SĐT Zalo → <a href="#" onclick="showPage('users');closeModal('m-settings')" style="color:var(--sky)">Vào Users để thêm</a></div>`
+        }
+      </div>
+    </div>`).join('');
+}
+
+function saveZNS(){
+  ZNS_CFG.token=$('zns-token').value.trim();
+  ZNS_CFG.oaId=$('zns-oaid').value.trim();
+  ZNS_CFG.templates.lead=$('zns-tpl-lead').value.trim();
+  ZNS_CFG.templates.resale=$('zns-tpl-resale').value.trim();
+  ZNS_CFG.templates.bday=$('zns-tpl-bday').value.trim();
+  toast('💾 Đã lưu cấu hình ZNS!');
+  $('zns-result').innerHTML='<span style="color:var(--green)">✅ Config đã lưu. Sẵn sàng khi Template được duyệt.</span>';
+}
+
+async function testZNS(){
+  if(!ZNS_CFG.token){
+    $('zns-result').innerHTML='<span style="color:var(--orange)">⚠️ Chưa nhập Access Token!</span>';
+    return;
+  }
+  const testPhone=USERS.find(u=>u.zalo)?.zalo;
+  if(!testPhone){
+    $('zns-result').innerHTML='<span style="color:var(--orange)">⚠️ Chưa có user nào nhập SĐT Zalo!</span>';
+    return;
+  }
+  $('zns-result').innerHTML='<span style="color:var(--ink4)">⏳ Đang gửi test...</span>';
+  try {
+    const res=await fetch('https://business.openapi.zalo.me/message/template',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','access_token':ZNS_CFG.token},
+      body:JSON.stringify({
+        phone: testPhone,
+        template_id: ZNS_CFG.templates.lead || ZNS_CFG.templates.resale,
+        template_data:{
+          sale_name:'Test Sale',
+          customer_name:'Nguyễn Test',
+          phone:'0900000000',
+          tour:'Tour Test',
+          source:'Test'
+        },
+        tracking_id:'test_'+Date.now()
+      })
+    });
+    const data=await res.json();
+    if(data.error===0){
+      $('zns-result').innerHTML='<span style="color:var(--green)">✅ Gửi ZNS thành công! Kiểm tra Zalo số '+testPhone+'</span>';
+      toast('✅ ZNS test thành công!');
+    } else {
+      $('zns-result').innerHTML=`<span style="color:var(--red)">❌ Lỗi ZNS: ${data.message} (code: ${data.error})</span>`;
+    }
+  } catch(e){
+    $('zns-result').innerHTML='<span style="color:var(--orange)">⚠️ Không gọi được API (CORS). Cần deploy backend để gọi ZNS thật.</span>';
+  }
+}
+
+// Gửi ZNS khi có lead mới (sẽ active khi có token + template)
+async function sendZNSNewLead(lead){
+  if(!ZNS_CFG.token||!ZNS_CFG.templates.lead) return;
+  const sale=USERS.find(u=>u.name===lead.sale);
+  if(!sale?.zalo) return;
+  try {
+    await fetch('https://business.openapi.zalo.me/message/template',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','access_token':ZNS_CFG.token},
+      body:JSON.stringify({
+        phone:sale.zalo,
+        template_id:ZNS_CFG.templates.lead,
+        template_data:{
+          sale_name:sale.name,
+          customer_name:lead.name,
+          phone:lead.phone,
+          tour:lead.tour,
+          source:lead.source||'—'
+        },
+        tracking_id:'lead_'+lead.id
+      })
+    });
+  } catch(e){}
+}
+
+// Gửi ZNS sinh nhật
+async function sendZNSBirthday(customer, saleName){
+  if(!ZNS_CFG.token||!ZNS_CFG.templates.bday) return;
+  const sale=USERS.find(u=>u.name===saleName);
+  if(!sale?.zalo) return;
+  const c=CUSTOMERS[customer.phone]||customer;
+  try {
+    await fetch('https://business.openapi.zalo.me/message/template',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','access_token':ZNS_CFG.token},
+      body:JSON.stringify({
+        phone:sale.zalo,
+        template_id:ZNS_CFG.templates.bday,
+        template_data:{
+          sale_name:saleName,
+          customer_name:c.name,
+          phone:c.phone,
+          tier:getTier(c.totalPoints||0)?.label||'Chưa có hạng',
+          points:String(c.points||0)
+        },
+        tracking_id:'bday_'+c.phone+'_'+Date.now()
+      })
+    });
+  } catch(e){}
+}
 // ══════════════════════════════════════════════════
 function renderSettings(){
   const r=$('set-rate'); if(!r)return;
@@ -2630,6 +2994,8 @@ function renderSettings(){
   $('set-bday-before').value=LOYALTY_CFG.bdayBefore;
   $('set-bday-msg').value=LOYALTY_CFG.bdayMsg;
   updateSettingsExample();
+  renderZNSStatus();
+  updatePushStatusBadge();
   // Tier config
   $('tier-config-list').innerHTML=LOYALTY_CFG.tiers.map((t,i)=>`
     <div class="tier-config-row">
