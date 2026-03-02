@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Sky CRM — Hanoi Sky Tours</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#0EA5E9;--sky-d:#0284C7;--sky-l:#E0F2FE;--sky-ll:#F0F9FF;
+  --ink:#0A1628;--ink2:#1C3252;--ink3:#3D5A80;--ink4:#7A94B0;
+  --bg:#F4F7FB;--surface:#FFFFFF;--border:#DDE5EE;--border2:#EEF2F8;
+  --green:#059669;--green-l:#D1FAE5;--red:#DC2626;--red-l:#FEE2E2;
+  --orange:#D97706;--orange-l:#FEF3C7;--purple:#7C3AED;--purple-l:#EDE9FE;
+  --gold:#B45309;--gold-l:#FEF9C3;--teal:#0891B2;--teal-l:#CFFAFE;
+  --r:10px;--r2:14px;--r3:18px;
+  --sh1:0 1px 4px rgba(10,22,40,.06);
+  --sh2:0 4px 16px rgba(10,22,40,.1);
+  --sh3:0 12px 40px rgba(10,22,40,.15);
+  --nav:56px;--mob:58px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:'Sora',system-ui,sans-serif;font-size:14px;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button,input,select,textarea{font-family:inherit}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+
+/* ══════ LOGIN ══════════════════════════════════════ */
+#login-screen{
+  display:flex;min-height:100vh;align-items:center;justify-content:center;
+  background:var(--ink);position:relative;overflow:hidden;padding:20px;
+}
+.lo-mesh{position:absolute;inset:0;background:
+  radial-gradient(ellipse 70% 60% at 15% 40%,rgba(14,165,233,.18) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 70% at 85% 70%,rgba(124,58,237,.12) 0%,transparent 60%),
+  radial-gradient(ellipse 60% 40% at 60% 10%,rgba(9,131,178,.1) 0%,transparent 60%);
+  pointer-events:none}
+.lo-grid{position:absolute;inset:0;opacity:.03;
+  background-image:linear-gradient(rgba(255,255,255,.8) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.8) 1px,transparent 1px);
+  background-size:32px 32px;pointer-events:none}
+.lo-card{
+  position:relative;z-index:2;width:100%;max-width:400px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(20px);border-radius:24px;padding:40px 36px;
+  animation:riseUp .5s cubic-bezier(.34,1.3,.64,1) both;
+}
+@keyframes riseUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:460px){.lo-card{padding:28px 20px}}
+.lo-logo{display:flex;align-items:center;gap:11px;margin-bottom:28px}
+.lo-logo-box{width:42px;height:42px;background:linear-gradient(135deg,#38BDF8,#0369A1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 4px 12px rgba(14,165,233,.4)}
+.lo-logo-txt{font-family:'Playfair Display',serif;font-size:18px;color:#fff;line-height:1}
+.lo-logo-sub{font-size:10px;color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+.lo-h{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin-bottom:4px;line-height:1.2}
+.lo-sub{font-size:13px;color:rgba(255,255,255,.35);margin-bottom:26px}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:10px;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.lf input{width:100%;padding:11px 13px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:9px;color:#fff;font-size:14px;outline:none;transition:border .2s,background .2s}
+.lf input:focus{border-color:var(--sky);background:rgba(14,165,233,.07)}
+.lf input::placeholder{color:rgba(255,255,255,.18)}
+.lo-btn{width:100%;padding:13px;background:linear-gradient(135deg,#38BDF8,#0369A1);border:none;border-radius:9px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:4px;letter-spacing:.02em}
+.lo-btn:hover{opacity:.88}.lo-btn:active{transform:scale(.98)}
+.lo-demos{margin-top:18px;border-top:1px solid rgba(255,255,255,.07);padding-top:15px}
+.lo-demos-lbl{font-size:9px;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.lo-chips{display:flex;gap:6px;flex-wrap:wrap}
+.lo-chip{padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);font-size:11px;color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s}
+.lo-chip:hover,.lo-chip:active{background:rgba(14,165,233,.15);color:#fff;border-color:var(--sky)}
+.lo-chip b{color:var(--sky)}
+
+/* ══════ APP SHELL ══════════════════════════════════ */
+#app{display:none;flex-direction:column;min-height:100vh}
+#app.on{display:flex}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:var(--nav);background:var(--ink);display:flex;align-items:center;
+  justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:300;
+  box-shadow:0 1px 0 rgba(255,255,255,.07),0 2px 12px rgba(10,22,40,.2);gap:10px;flex-shrink:0
+}
+.tb-brand{font-family:'Playfair Display',serif;font-size:16px;color:#fff;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tb-brand-ico{width:28px;height:28px;background:linear-gradient(135deg,#38BDF8,#0369A1);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 2px 8px rgba(14,165,233,.3)}
+.tb-brand em{color:var(--sky);font-style:normal}
+.tb-nav{display:flex;align-items:center;gap:1px;flex:1;padding:0 10px;overflow-x:auto;scrollbar-width:none}
+.tb-nav::-webkit-scrollbar{display:none}
+.nb{padding:6px 11px;border-radius:7px;font-size:12px;font-weight:500;color:rgba(255,255,255,.42);cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid transparent;background:none;display:flex;align-items:center;gap:5px}
+.nb:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nb.on{color:#fff;background:rgba(14,165,233,.18);border-color:rgba(14,165,233,.3)}
+.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.bell-wrap{position:relative}
+.bell{width:32px;height:32px;border-radius:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#fff;transition:background .15s}
+.bell:hover{background:rgba(255,255,255,.12)}
+.bell-dot{position:absolute;top:-4px;right:-4px;width:17px;height:17px;background:var(--red);border-radius:50%;font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.user-pill{display:flex;align-items:center;gap:7px;padding:3px 11px 3px 4px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:100px;cursor:pointer;transition:background .15s}
+.user-pill:hover{background:rgba(255,255,255,.12)}
+.uav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--gold));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.unm{font-size:12px;font-weight:500;color:rgba(255,255,255,.7)}
+
+/* ── NOTIF PANEL ── */
+.notif-panel{
+  display:none;position:fixed;top:calc(var(--nav)+8px);right:12px;
+  width:min(340px,calc(100vw - 20px));background:var(--surface);
+  border-radius:var(--r2);border:1px solid var(--border);box-shadow:var(--sh3);
+  z-index:400;max-height:72vh;overflow-y:auto;animation:dropIn .2s ease
+}
+.notif-panel.on{display:block}
+@keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.np-head{padding:13px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.np-title{font-size:13px;font-weight:600;color:var(--ink)}
+.np-clear{font-size:11px;color:var(--sky);cursor:pointer}
+.np-item{padding:11px 14px;border-bottom:1px solid var(--border2);display:flex;gap:10px;cursor:pointer;transition:background .1s}
+.np-item:hover{background:var(--bg)}
+.np-ico{width:32px;height:32px;border-radius:8px;background:var(--sky-l);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.np-t{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:1px}
+.np-d{font-size:11px;color:var(--ink4)}
+
+/* ── MOBILE NAV ── */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(255,255,255,.08);z-index:300;align-items:center;height:var(--mob);padding-bottom:env(safe-area-inset-bottom,0)}
+.mob-nav-items{display:flex;width:100%}
+.mnb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:6px 2px;transition:all .12s}
+.mnb .mi{font-size:18px;line-height:1}
+.mnb .ml{font-size:9px;font-weight:500;color:rgba(255,255,255,.35);letter-spacing:.03em}
+.mnb.on{background:rgba(14,165,233,.12)}
+.mnb.on .ml{color:var(--sky)}
+
+/* ── PAGE LAYOUT ── */
+.pg-wrap{flex:1;overflow-y:auto;overflow-x:hidden}
+.page{display:none;padding:22px;max-width:1500px;margin:0 auto;padding-bottom:26px}
+.page.on{display:block;animation:pgFade .18s ease}
+@keyframes pgFade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){
+  .page{padding:12px 10px calc(var(--mob)+16px)}
+  .tb-nav,.unm{display:none}
+  .mob-nav{display:flex}
+}
+
+/* ── PAGE HEADER ── */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.ph-title{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,26px);color:var(--ink);line-height:1.2}
+.ph-sub{font-size:11px;color:var(--ink4);margin-top:3px;font-weight:400}
+.ph-acts{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:18px}
+.stat{background:var(--surface);border-radius:var(--r2);padding:14px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:11px;transition:box-shadow .15s,transform .15s}
+.stat:hover{box-shadow:var(--sh2);transform:translateY(-1px)}
+.stat-ic{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ic-b{background:#DBEAFE}.ic-g{background:#D1FAE5}.ic-o{background:#FEF3C7}.ic-r{background:#FEE2E2}.ic-p{background:#EDE9FE}.ic-t{background:#CFFAFE}.ic-gd{background:#FEF9C3}
+.sv{font-size:21px;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.5px}
+.sl{font-size:10px;color:var(--ink4);margin-top:2px;font-weight:500}
+
+/* ── CARD ── */
+.card{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);overflow:hidden;margin-bottom:14px;box-shadow:var(--sh1)}
+.card-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.card-title{font-size:13px;font-weight:600;color:var(--ink)}
+
+/* ── SEARCH BAR ── */
+.sbar{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;transition:border .15s;flex:1;min-width:0}
+.sbar:focus-within{border-color:var(--sky)}
+.sbar-ico{color:var(--ink4);font-size:14px;flex-shrink:0}
+.sbar input{border:none;background:none;outline:none;font-size:13px;font-family:inherit;color:var(--ink);width:100%}
+.sbar input::placeholder{color:var(--ink4)}
+
+/* ── FILTER TOOLBAR ── */
+.ftb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.ftb-sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+
+/* ── STATUS FILTER CHIPS ── */
+.sf-chips{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.sf-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 13px;border-radius:100px;font-size:11px;font-weight:600;
+  border:1.5px solid var(--border);background:var(--surface);color:var(--ink3);
+  cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none
+}
+.sf-chip:hover{border-color:var(--sky);color:var(--sky)}
+.sf-chip.on{background:var(--sky);color:#fff;border-color:var(--sky)}
+.sf-chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.7}
+.sf-chip.on .dot{background:#fff;opacity:1}
+/* colored active states */
+.sf-chip[data-v="Tiềm năng"].on{background:#3B82F6;border-color:#3B82F6}
+.sf-chip[data-v="Đang tư vấn"].on{background:var(--orange);border-color:var(--orange)}
+.sf-chip[data-v="Đã chốt"].on{background:var(--green);border-color:var(--green)}
+.sf-chip[data-v="Không chốt"].on{background:var(--red);border-color:var(--red)}
+
+/* ── TOUR FILTER SELECT ── */
+.tour-sel{padding:5px 28px 5px 11px;border-radius:100px;font-size:11px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--ink3);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A94B0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;font-family:inherit;transition:all .15s}
+.tour-sel:hover,.tour-sel:focus{border-color:var(--sky);color:var(--sky)}
+.tour-sel.active-filter{border-color:var(--sky);color:var(--sky);background-color:var(--sky-ll)}
+
+/* ── ADV FILTER ── */
+.adv-f{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;animation:pgFade .18s ease}
+.adv-f-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:10px}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th{padding:9px 13px;text-align:left;font-size:9.5px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.08em;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 13px;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--border2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover td{background:#FAFCFF}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:100px;font-size:11px;font-weight:600;white-space:nowrap;line-height:1.4}
+.bg{background:var(--green-l);color:#065F46}
+.bb{background:#DBEAFE;color:#1D4ED8}
+.bo{background:var(--orange-l);color:#92400E}
+.br{background:var(--red-l);color:#991B1B}
+.bp{background:var(--purple-l);color:#5B21B6}
+.bt{background:var(--teal-l);color:#155E75}
+.bgray{background:#F1F5F9;color:#475569}
+.bgold{background:var(--gold-l);color:#92400E}
+.tag-old{display:inline-flex;align-items:center;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;background:var(--purple-l);color:#5B21B6}
+.tag-new{display:inline-flex;align-items:center;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;background:var(--green-l);color:#065F46}
+
+/* ── BUTTONS ── */
+.btn{padding:7px 14px;border-radius:var(--r);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:none;transition:all .12s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;line-height:1}
+.btn:active{transform:scale(.97)}
+.btn-sky{background:var(--sky);color:#fff}.btn-sky:hover{background:var(--sky-d)}
+.btn-ghost{background:var(--bg);color:var(--ink3);border:1.5px solid var(--border)}.btn-ghost:hover{border-color:var(--sky);color:var(--sky)}
+.btn-red{background:var(--red-l);color:var(--red);border:1.5px solid #FECACA}.btn-red:hover{background:#FECACA}
+.btn-green{background:var(--green-l);color:var(--green);border:1.5px solid #A7F3D0}.btn-green:hover{background:#A7F3D0}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:6px}
+.act{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--surface);color:var(--ink3);transition:all .12s;font-family:inherit;line-height:1}
+.act:hover{background:var(--sky-l);color:var(--sky);border-color:var(--sky)}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,22,40,.55);backdrop-filter:blur(3px);z-index:500;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.overlay{align-items:center;padding:20px}}
+.overlay.on{display:flex;animation:ovShow .15s ease}
+@keyframes ovShow{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border-radius:20px 20px 0 0;padding:22px 20px;width:100%;max-height:94vh;overflow-y:auto;animation:mSlide .25s cubic-bezier(.34,1.2,.64,1)}
+@media(min-width:600px){.modal{border-radius:20px;max-width:580px;animation:mDrop .2s ease}}
+@keyframes mSlide{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes mDrop{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px}
+.mt{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);flex:1}
+.mx{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--border);background:none;cursor:pointer;font-size:16px;color:var(--ink3);display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all .12s;flex-shrink:0}
+.mx:hover{background:var(--bg)}
+
+/* ── FORMS ── */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg label{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em}
+.fg input,.fg select,.fg textarea{
+  padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--r);
+  font-size:13px;font-family:inherit;color:var(--ink);outline:none;
+  transition:border .15s,box-shadow .15s;background:var(--surface);
+  appearance:none;-webkit-appearance:none
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
+.fg textarea{resize:vertical;min-height:70px;line-height:1.6}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237A94B0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.form-grid.g1{grid-template-columns:1fr}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+.fc2{grid-column:1/-1}
+.fa{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.fa-r{display:flex;gap:8px}
+@media(max-width:460px){.fa{flex-direction:column}.fa .btn,.fa-r,.fa-r .btn{width:100%;justify-content:center}}
+
+/* ── DETAIL ── */
+.detail-layout{display:grid;grid-template-columns:1fr 290px;gap:14px}
+@media(max-width:800px){.detail-layout{grid-template-columns:1fr}}
+.ic{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:16px;margin-bottom:12px;box-shadow:var(--sh1)}
+.ic-ttl{font-size:10px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.ic-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border2)}
+.ic-row:last-child{border-bottom:none}
+.ic-lbl{font-size:11px;color:var(--ink4);flex-shrink:0}
+.ic-val{font-size:12.5px;font-weight:500;color:var(--ink);text-align:right;max-width:65%}
+
+/* ── PROGRESS ── */
+.prog{height:6px;background:#E9EFF6;border-radius:6px;overflow:hidden;margin:10px 0 3px}
+.prog-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--green),#34D399);transition:width .5s ease}
+
+/* ── SEARCH HERO ── */
+.srch-hero{text-align:center;max-width:480px;margin:0 auto 24px}
+.srch-hero h2{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,28px);margin-bottom:5px;color:var(--ink)}
+.srch-hero p{font-size:13px;color:var(--ink4);margin-bottom:18px}
+.srch-big{display:flex;background:var(--surface);border:2px solid var(--border);border-radius:var(--r2);overflow:hidden;transition:border .18s,box-shadow .18s}
+.srch-big:focus-within{border-color:var(--sky);box-shadow:0 0 0 4px rgba(14,165,233,.1)}
+.srch-big span{padding:0 13px;font-size:17px;display:flex;align-items:center;color:var(--ink4)}
+.srch-big input{flex:1;padding:13px 6px;border:none;outline:none;font-size:14px;font-family:inherit;color:var(--ink)}
+.srch-big input::placeholder{color:var(--ink4)}
+.srch-big button{padding:0 18px;background:var(--sky);border:none;color:#fff;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;letter-spacing:.03em}
+.srch-big button:hover{background:var(--sky-d)}
+
+/* ── DASHBOARD ── */
+.db-grid{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:14px}
+@media(max-width:900px){.db-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:18px;box-shadow:var(--sh1)}
+.cc-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.bar-wrap{display:flex;align-items:flex-end;gap:5px;height:120px}
+.bc{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.bf{width:100%;border-radius:5px 5px 0 0;transition:height .5s ease}
+.bv{font-size:9px;font-weight:700;color:var(--ink);text-align:center}
+.bl{font-size:8px;color:var(--ink4);text-align:center;line-height:1.3}
+.funnel-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ft{flex:1;background:#EEF2F8;border-radius:100px;height:22px;overflow:hidden}
+.ff{height:100%;border-radius:100px;display:flex;align-items:center;padding-left:9px;font-size:10px;font-weight:700;color:#fff;transition:width .6s ease}
+.fn{font-size:11px;color:var(--ink4);width:80px;text-align:right;flex-shrink:0}
+.fnn{font-size:11px;font-weight:700;color:var(--ink);width:24px;text-align:right;flex-shrink:0}
+
+/* ── MKT UPLOAD ── */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .18s;background:#FAFBFD}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--sky);background:var(--sky-ll)}
+.uz-ico{font-size:38px;margin-bottom:10px}
+.uz-t{font-size:14px;font-weight:600;color:var(--ink)}
+.uz-s{font-size:12px;color:var(--ink4);margin-top:4px}
+
+/* ── TIMELINE ── */
+.tl{display:flex;gap:10px;padding:9px 11px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);margin-bottom:8px}
+.tl-ico{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--sky-l),#BAE6FD);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:44px 20px;color:var(--ink4)}
+.empty-ico{font-size:44px;margin-bottom:12px}
+.empty-t{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:calc(var(--mob)+10px);left:50%;transform:translateX(-50%) translateY(60px);
+  background:var(--ink2);color:#fff;padding:10px 18px;border-radius:9px;font-size:12.5px;font-weight:500;
+  box-shadow:var(--sh3);opacity:0;transition:all .28s cubic-bezier(.34,1.3,.64,1);
+  pointer-events:none;white-space:nowrap;z-index:700;max-width:calc(100vw - 30px)
+}
+@media(min-width:600px){#toast{bottom:22px;left:auto;right:22px;transform:translateY(60px)}}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:600px){#toast.show{transform:translateY(0)}}
+#toast.ok{background:#065F46}
+#toast.err{background:#991B1B}
+
+/* ── LOGOUT CONFIRM ── */
+#lout-box{display:none;position:fixed;top:calc(var(--nav)+10px);right:14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:16px;box-shadow:var(--sh3);z-index:600;width:220px;animation:dropIn .2s ease}
+#lout-box.on{display:block}
+
+/* ── LEAD TYPE BADGE ── */
+.lt-personal{background:#DBEAFE;color:#1D4ED8;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.lt-company{background:#FEF3C7;color:#92400E;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.lt-agency{background:#EDE9FE;color:#5B21B6;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+
+/* ── MEMBERSHIP TIERS ── */
+.tier{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700;white-space:nowrap}
+.tier-none{background:#F1F5F9;color:#94A3B8;border:1px solid #E2E8F0}
+.tier-bronze{background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#92400E;border:1px solid #FCD34D}
+.tier-silver{background:linear-gradient(135deg,#F1F5F9,#E2E8F0);color:#475569;border:1px solid #CBD5E1}
+.tier-gold{background:linear-gradient(135deg,#FEF9C3,#FEF08A);color:#854D0E;border:1px solid #EAB308}
+.tier-platinum{background:linear-gradient(135deg,#EDE9FE,#DDD6FE);color:#5B21B6;border:1px solid #A78BFA}
+.tier-diamond{background:linear-gradient(135deg,#CFFAFE,#A5F3FC);color:#155E75;border:1px solid #22D3EE}
+/* ── BIRTHDAY ── */
+.bday-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;background:linear-gradient(135deg,#FEE2E2,#FECDD3);color:#9F1239;font-size:10px;font-weight:700;border:1px solid #FECDD3;animation:bdayPulse 2s infinite}
+@keyframes bdayPulse{0%,100%{box-shadow:0 0 0 0 rgba(159,18,57,.25)}50%{box-shadow:0 0 0 5px rgba(159,18,57,0)}}
+/* ── SETTINGS ── */
+.set-section{background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:20px;margin-bottom:14px;box-shadow:var(--sh1)}
+.set-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.tier-config-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border);margin-bottom:8px;flex-wrap:wrap}
+.tier-config-row:last-child{margin-bottom:0}
+.tier-config-row input[type=number]{width:100px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;text-align:center;background:var(--surface)}
+.tier-config-row input[type=number]:focus{outline:none;border-color:var(--sky)}
+/* ── POINTS DISPLAY ── */
+.pts-bar{height:8px;background:#E9EFF6;border-radius:8px;overflow:hidden;margin:6px 0 2px}
+.pts-fill{height:100%;border-radius:8px;transition:width .6s ease}
+</style>
+</head>
+<body>
+
+<!-- ══ DEMO GATE ══════════════════════════════════ -->
+<div id="demo-gate" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#0A1628 0%,#1C3252 50%,#0A1628 100%);display:flex;align-items:center;justify-content:center;font-family:'Sora',system-ui,sans-serif">
+  <div style="background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:40px 36px;width:100%;max-width:360px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.4)">
+    <div style="font-size:36px;margin-bottom:12px">✈️</div>
+    <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Sky CRM Demo</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:28px">Hanoi Sky Tours — Internal Preview</div>
+    <input id="gate-pw" type="password" placeholder="Nhập mật khẩu xem demo..."
+      style="width:100%;padding:12px 16px;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:14px;font-family:inherit;outline:none;text-align:center;letter-spacing:2px;margin-bottom:10px"
+      onkeydown="if(event.key==='Enter')checkGate()">
+    <div id="gate-err" style="font-size:12px;color:#FCA5A5;margin-bottom:10px;min-height:18px"></div>
+    <button onclick="checkGate()" style="width:100%;padding:13px;background:linear-gradient(135deg,#0EA5E9,#0284C7);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.3px">
+      Xem Demo →
+    </button>
+    <div style="margin-top:20px;font-size:11px;color:rgba(255,255,255,.3)">🔒 Chỉ dành cho nội bộ</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const PASS = 'Vitgia@123';
+  function checkGate(){
+    const v = document.getElementById('gate-pw').value;
+    if(v === PASS){
+      document.getElementById('demo-gate').style.display='none';
+      sessionStorage.setItem('sky_demo_ok','1');
+    } else {
+      const err = document.getElementById('gate-err');
+      err.textContent = '❌ Mật khẩu không đúng, thử lại';
+      document.getElementById('gate-pw').value='';
+      document.getElementById('gate-pw').focus();
+      setTimeout(()=>err.textContent='', 2500);
+    }
+  }
+  window.checkGate = checkGate;
+  // Auto-unlock nếu đã nhập đúng trong session này
+  if(sessionStorage.getItem('sky_demo_ok')==='1'){
+    document.getElementById('demo-gate').style.display='none';
+  }
+})();
+</script>
+
+<!-- ══ LOGIN ═══════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="lo-mesh"></div><div class="lo-grid"></div>
+  <div class="lo-card">
+    <div class="lo-logo">
+      <div class="lo-logo-box">✈️</div>
+      <div><div class="lo-logo-txt">Sky CRM</div><div class="lo-logo-sub">Hanoi Sky Tours</div></div>
+    </div>
+    <div class="lo-h">Chào mừng trở lại</div>
+    <div class="lo-sub">Đăng nhập để tiếp tục</div>
+    <div class="lf"><label>Tài khoản</label><input type="text" id="li-u" value="cmo" placeholder="Username" autocomplete="username"></div>
+    <div class="lf"><label>Mật khẩu</label><input type="password" id="li-p" value="123456" placeholder="Mật khẩu" autocomplete="current-password"></div>
+    <button class="lo-btn" onclick="doLogin()">Đăng nhập →</button>
+    <div class="lo-demos">
+      <div class="lo-demos-lbl">Demo accounts</div>
+      <div class="lo-chips">
+        <div class="lo-chip" onclick="setDemo('cmo')">🏆 <b>Vitgia</b></div>
+        <div class="lo-chip" onclick="setDemo('minh')">💼 <b>minh</b> Sale</div>
+        <div class="lo-chip" onclick="setDemo('chat')">💬 <b>chat</b> FB</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ════════════════════════════════════════ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="tb-brand">
+        <div class="tb-brand-ico">✈️</div>
+        Sky<em>CRM</em>
+      </div>
+      <nav class="tb-nav" id="desk-nav">
+        <button class="nb on" onclick="showPage('leads')">📋 Leads</button>
+        <button class="nb hidden" id="dn-search" onclick="showPage('search')">🔍 Tra Cứu</button>
+        <button class="nb" id="dn-remind" onclick="showPage('reminders')">🔔 Nhắc Lịch <span id="rb-cnt" style="display:none;background:var(--red);color:#fff;border-radius:100px;padding:1px 5px;font-size:9px;margin-left:1px"></span></button>
+        <button class="nb hidden" id="dn-dash" onclick="showPage('dashboard')">📊 Dashboard</button>
+        <button class="nb hidden" id="dn-mkt" onclick="showPage('mkt')">📊 Báo Cáo</button>
+        <button class="nb hidden" id="dn-loyalty" onclick="showPage('loyalty')">⭐ Thành Viên</button>
+        <button class="nb hidden" id="dn-settings" onclick="showPage('settings')">⚙️ Cài Đặt</button>
+        <button class="nb hidden" id="dn-users" onclick="showPage('users')">👥 Users</button>
+      </nav>
+    </div>
+    <div class="tb-right">
+      <div class="bell-wrap">
+        <div class="bell" onclick="toggleNotif()">🔔<div class="bell-dot" id="bell-cnt">3</div></div>
+        <div class="notif-panel" id="notif-p">
+          <div class="np-head"><span class="np-title">Thông báo</span><span class="np-clear" onclick="document.getElementById('notif-p').classList.remove('on')">✕</span></div>
+          <div class="np-item"><div class="np-ico">📞</div><div><div class="np-t">Nhắc resale — Trần Thị Bình</div><div class="np-d">Tour Phú Quốc · Hôm nay</div></div></div>
+          <div class="np-item"><div class="np-ico">📞</div><div><div class="np-t">Nhắc resale — Ngô Minh Đức</div><div class="np-d">Tour Đà Lạt · Hôm nay</div></div></div>
+          <div class="np-item"><div class="np-ico">🆕</div><div><div class="np-t">Lead mới từ Facebook</div><div class="np-d">Công ty ABC — Tour Hạ Long</div></div></div>
+        </div>
+      </div>
+      <div class="user-pill" onclick="showLogout()">
+        <div class="uav" id="uav">C</div>
+        <div class="unm" id="unm">Vitgia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT BOX -->
+  <div id="lout-box">
+    <div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px">Đăng xuất?</div>
+    <div style="display:flex;gap:7px">
+      <button onclick="doLogout()" style="flex:1;padding:8px;background:var(--red);color:#fff;border:none;border-radius:7px;font-weight:600;cursor:pointer;font-family:inherit;font-size:12px">Đăng xuất</button>
+      <button onclick="hideLogout()" style="flex:1;padding:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;font-weight:600;cursor:pointer;font-family:inherit;font-size:12px;color:var(--ink3)">Hủy</button>
+    </div>
+  </div>
+
+  <!-- PAGES -->
+  <div class="pg-wrap">
+
+    <!-- ─── LEADS PAGE ─── -->
+    <div class="page on" id="page-leads">
+      <div class="ph">
+        <div><div class="ph-title">Danh Sách Lead</div><div class="ph-sub" id="leads-sub">Tất cả leads</div></div>
+        <div class="ph-acts">
+          <button class="btn btn-ghost btn-sm" onclick="toggleAdvFilter()">⚙️ Lọc</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportLeads()">📥 Xuất CSV</button>
+          <button class="btn btn-sky btn-sm" onclick="openNewLead()">＋ Thêm Lead</button>
+        </div>
+      </div>
+
+      <!-- Adv Filter Panel -->
+      <div class="adv-f hidden" id="adv-f">
+        <div style="font-size:10px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.08em">Bộ Lọc Nâng Cao</div>
+        <div class="adv-f-grid">
+          <div class="fg"><label>Sale</label><select id="af-sale" onchange="renderLeads()"><option value="">Tất cả Sale</option></select></div>
+          <div class="fg"><label>Nguồn</label><select id="af-src" onchange="renderLeads()"><option value="">Tất cả nguồn</option><option>Facebook</option><option>Instagram</option><option>Zalo</option><option>Google</option><option>Referral</option><option>Khác</option></select></div>
+          <div class="fg"><label>Loại Khách</label><select id="af-type" onchange="renderLeads()"><option value="">Tất cả</option><option>Cá nhân</option><option>Khách Công Ty</option><option>Khách Đại Lý</option></select></div>
+          <div class="fg"><label>Lịch Sử KH</label><select id="af-hist" onchange="renderLeads()"><option value="">Tất cả</option><option value="old">✅ Khách cũ</option><option value="new">🆕 Khách mới</option></select></div>
+          <div class="fg"><label>Từ Ngày</label><input type="date" id="af-from" onchange="renderLeads()"></div>
+          <div class="fg"><label>Đến Ngày</label><input type="date" id="af-to" onchange="renderLeads()"></div>
+        </div>
+        <div style="margin-top:10px;text-align:right"><button class="btn btn-ghost btn-sm" onclick="clearFilter()">✕ Xóa bộ lọc</button></div>
+      </div>
+
+      <div class="stats-row" id="stats-row"></div>
+
+      <div class="card">
+        <!-- Filter Toolbar -->
+        <div class="ftb">
+          <div class="sbar" style="max-width:260px"><span class="sbar-ico">🔍</span><input id="lead-q" placeholder="Tên, SĐT, tour, ghi chú..." oninput="renderLeads()"></div>
+
+          <!-- Tour filter dropdown -->
+          <select class="tour-sel" id="tour-filter" onchange="renderLeads()">
+            <option value="">🗺 Tất cả Tour</option>
+            <option>Tour Đà Lạt 3N2Đ</option>
+            <option>Tour Phú Quốc 4N3Đ</option>
+            <option>Tour Hội An 2N1Đ</option>
+            <option>Tour Sapa 3N2Đ</option>
+            <option>Tour Nha Trang 4N3Đ</option>
+            <option>Tour Hạ Long 3N2Đ</option>
+          </select>
+
+          <div class="ftb-sep"></div>
+
+          <!-- Status chips — onclick trực tiếp, không dùng delegation -->
+          <div class="sf-chips">
+            <div class="sf-chip on" data-v="all" onclick="setStatusFilter(this)">Tất cả</div>
+            <div class="sf-chip" data-v="Tiềm năng" onclick="setStatusFilter(this)"><span class="dot"></span>Tiềm năng</div>
+            <div class="sf-chip" data-v="Đang tư vấn" onclick="setStatusFilter(this)"><span class="dot"></span>Đang TV</div>
+            <div class="sf-chip" data-v="Đã chốt" onclick="setStatusFilter(this)"><span class="dot"></span>Đã chốt</div>
+            <div class="sf-chip" data-v="Không chốt" onclick="setStatusFilter(this)"><span class="dot"></span>Không chốt</div>
+          </div>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên Khách / Loại</th>
+                <th>SĐT / Nguồn</th>
+                <th>Tour</th>
+                <th>C.Ty Tổ Chức</th>
+                <th>Giá NL</th>
+                <th>Giá KM</th>
+                <th>Sale</th>
+                <th>TT</th>
+                <th>Đã Thu</th>
+                <th>Còn Lại</th>
+                <th>KH</th>
+                <th style="width:80px"></th>
+              </tr>
+            </thead>
+            <tbody id="leads-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── LEAD DETAIL ─── -->
+    <div class="page" id="page-detail">
+      <div class="ph">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="showPage('leads')">← Quay lại</button>
+          <div><div class="ph-title" id="d-title">Chi Tiết</div><div class="ph-sub" id="d-sub"></div></div>
+        </div>
+        <div class="ph-acts">
+          <button class="btn btn-ghost btn-sm" onclick="openEditLead(ACT_LEAD)">✏️ Sửa</button>
+          <button class="btn btn-sky btn-sm" onclick="openStatusModal()">📝 Cập nhật</button>
+        </div>
+      </div>
+      <div class="detail-layout" id="detail-body"></div>
+    </div>
+
+    <!-- ─── CUSTOMER SEARCH ─── -->
+    <div class="page" id="page-search">
+      <div class="srch-hero">
+        <h2>Tra Cứu Khách Hàng</h2>
+        <p>Nhập SĐT để xem lịch sử đặt tour</p>
+        <div class="srch-big">
+          <span>📱</span>
+          <input id="cust-q" placeholder="Nhập số điện thoại..." type="tel" oninput="searchCust(this.value)">
+          <button onclick="searchCust(document.getElementById('cust-q').value)">Tra cứu</button>
+        </div>
+      </div>
+      <div id="cust-result"></div>
+    </div>
+
+    <!-- ─── REMINDERS ─── -->
+    <div class="page" id="page-reminders">
+      <div class="ph"><div><div class="ph-title">Nhắc Lịch Resale</div><div class="ph-sub">Khách cần gọi hôm nay & sắp tới</div></div></div>
+      <div id="remind-body"></div>
+    </div>
+
+    <!-- ─── DASHBOARD ─── -->
+    <div class="page" id="page-dashboard">
+      <div class="ph"><div><div class="ph-title">Dashboard Vitgia</div><div class="ph-sub">Tổng quan hiệu suất</div></div></div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-ic ic-b">📋</div><div><div class="sv" id="db-tot">0</div><div class="sl">Tổng Lead</div></div></div>
+        <div class="stat"><div class="stat-ic ic-g">✅</div><div><div class="sv" id="db-chot">0</div><div class="sl">Đã Chốt</div></div></div>
+        <div class="stat"><div class="stat-ic ic-o">📈</div><div><div class="sv" id="db-rate">0%</div><div class="sl">Tỷ Lệ Chốt</div></div></div>
+        <div class="stat"><div class="stat-ic ic-gd">💰</div><div><div class="sv" id="db-rev">0</div><div class="sl">Doanh Thu</div></div></div>
+        <div class="stat"><div class="stat-ic ic-p">🏢</div><div><div class="sv" id="db-corp">0</div><div class="sl">Lead Công Ty</div></div></div>
+        <div class="stat"><div class="stat-ic ic-t">🤝</div><div><div class="sv" id="db-agency">0</div><div class="sl">Lead Đại Lý</div></div></div>
+      </div>
+      <div class="db-grid">
+        <div class="chart-card"><div class="cc-title">📊 Lead Theo Tour</div><div class="bar-wrap" id="chart-bars"></div></div>
+        <div class="chart-card"><div class="cc-title">🔻 Phễu Chuyển Đổi</div><div id="chart-funnel"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">🏆 Hiệu Suất Sale</div></div>
+        <div class="tbl-wrap"><table><thead><tr><th>Sale</th><th>Leads</th><th>Đang TV</th><th>Chốt</th><th>Tỷ Lệ</th><th>HĐ</th><th>Đã Thu</th><th>Còn lại</th></tr></thead><tbody id="sale-tbl"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ─── BÁO CÁO ─── -->
+    <div class="page" id="page-mkt">
+      <div class="ph">
+        <div><div class="ph-title">Báo Cáo</div><div class="ph-sub">Tổng quan doanh số & hiệu suất Sale</div></div>
+        <div class="ph-acts">
+          <select class="tour-sel" id="rpt-month" onchange="renderReport()" style="font-size:12px;padding:6px 28px 6px 11px">
+            <option value="">Tất cả tháng</option>
+            <option value="01/2025">Tháng 1/2025</option>
+            <option value="02/2025">Tháng 2/2025</option>
+            <option value="03/2025">Tháng 3/2025</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="exportReport()">📥 Xuất CSV</button>
+        </div>
+      </div>
+
+      <!-- Sub-tabs -->
+      <div style="display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap">
+        <div class="sf-chip on" data-rpt="overview" onclick="switchRptTab(this)">📈 Tổng Quan</div>
+        <div class="sf-chip" data-rpt="sales" onclick="switchRptTab(this)">🏆 Chi Tiết Sale</div>
+        <div class="sf-chip" data-rpt="mkt" onclick="switchRptTab(this)">💰 Ngân Sách MKT</div>
+      </div>
+
+      <!-- ── OVERVIEW TAB ── -->
+      <div id="rpt-overview">
+        <!-- KPI row -->
+        <div class="stats-row" id="rpt-kpis"></div>
+
+        <!-- 2-col charts -->
+        <div class="db-grid" style="margin-bottom:14px">
+          <!-- Lead theo trạng thái -->
+          <div class="chart-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div class="cc-title" style="margin:0">📊 Lead Theo Tour</div>
+            </div>
+            <div class="bar-wrap" id="rpt-bar-tour"></div>
+          </div>
+          <!-- Funnel -->
+          <div class="chart-card">
+            <div class="cc-title">🔻 Phễu Chuyển Đổi</div>
+            <div id="rpt-funnel"></div>
+          </div>
+        </div>
+
+        <!-- Nguồn lead -->
+        <div class="card" style="margin-bottom:14px">
+          <div class="card-head"><div class="card-title">📡 Phân Bổ Nguồn Lead</div></div>
+          <div style="padding:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end" id="rpt-sources"></div>
+        </div>
+      </div>
+
+      <!-- ── SALES DETAIL TAB ── -->
+      <div id="rpt-sales" style="display:none">
+        <!-- Sale stats cards -->
+        <div id="rpt-sale-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:14px"></div>
+        <!-- Sale table -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">📋 Bảng Chi Tiết Sale</div>
+            <select class="tour-sel" id="rpt-sale-sort" onchange="renderSaleDetail()" style="font-size:11px">
+              <option value="leads">Sắp xếp: Số Lead ↓</option>
+              <option value="rate">Sắp xếp: Tỷ Lệ Chốt ↓</option>
+              <option value="revenue">Sắp xếp: Doanh Số ↓</option>
+            </select>
+          </div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr>
+                <th>Sale</th>
+                <th>Tổng Lead</th><th>Tiềm Năng</th><th>Đang TV</th>
+                <th>Đã Chốt</th><th>Không Chốt</th>
+                <th>Tỷ Lệ Chốt</th>
+                <th>Hợp Đồng</th><th>Đã Thu</th><th>Còn Lại</th>
+                <th>Tour Mạnh Nhất</th>
+              </tr></thead>
+              <tbody id="rpt-sale-tbl"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MKT BUDGET TAB ── -->
+      <div id="rpt-mkt" style="display:none">
+        <div class="stats-row">
+          <div class="stat"><div class="stat-ic ic-b">💸</div><div><div class="sv" id="ms-budget">0</div><div class="sl">Tổng Chi Phí</div></div></div>
+          <div class="stat"><div class="stat-ic ic-g">🎯</div><div><div class="sv" id="ms-cpl">0</div><div class="sl">CPL TB</div></div></div>
+          <div class="stat"><div class="stat-ic ic-o">🏆</div><div><div class="sv" id="ms-cps">0</div><div class="sl">CPS TB</div></div></div>
+          <div class="stat"><div class="stat-ic ic-p">📈</div><div><div class="sv" id="ms-roi">0%</div><div class="sl">ROI Est.</div></div></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:12px">
+          <div class="sf-chip on" data-mkt="manual" onclick="switchMktTab(this)">✏️ Nhập tay</div>
+          <div class="sf-chip" data-mkt="upload" onclick="switchMktTab(this)">📁 Upload CSV</div>
+          <button class="btn btn-sky btn-sm" style="margin-left:auto" onclick="openModal('m-mkt')">＋ Thêm</button>
+        </div>
+        <div id="mkt-upload" style="display:none;margin-bottom:12px">
+          <div class="upload-zone" id="upload-zone" onclick="document.getElementById('mkt-file').click()">
+            <input type="file" id="mkt-file" accept=".csv,.xlsx,.xls" style="display:none">
+            <div class="uz-ico">📂</div>
+            <div class="uz-t">Kéo thả hoặc click để chọn</div>
+            <div class="uz-s">CSV, Excel (.xlsx .xls) · <a id="dl-tpl" href="#" onclick="dlTemplate(event)" style="color:var(--sky);font-weight:700">Tải file mẫu</a></div>
+          </div>
+          <div id="upload-prev"></div>
+        </div>
+        <div class="card" id="mkt-card"></div>
+      </div>
+    </div>
+
+    <!-- ─── USERS ─── -->
+    <div class="page" id="page-users">
+      <div class="ph">
+        <div><div class="ph-title">Quản Lý Users</div><div class="ph-sub">Phân quyền tài khoản</div></div>
+        <button class="btn btn-sky btn-sm" onclick="openNewUser()">＋ Tạo User</button>
+      </div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat"><div class="stat-ic ic-b">👥</div><div><div class="sv" id="us-tot">0</div><div class="sl">Tổng User</div></div></div>
+        <div class="stat"><div class="stat-ic ic-g">✅</div><div><div class="sv" id="us-act">0</div><div class="sl">Hoạt Động</div></div></div>
+        <div class="stat"><div class="stat-ic ic-r">🔒</div><div><div class="sv" id="us-lock">0</div><div class="sl">Đã Khóa</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Danh sách tài khoản</div>
+          <div class="sbar" style="max-width:200px"><span class="sbar-ico">🔍</span><input id="user-q" placeholder="Tìm..." oninput="renderUsers()"></div>
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Nhân Viên</th><th>Username</th><th>Vai Trò</th><th>Tour PT</th><th>TT</th><th>Tạo</th><th>Đăng nhập</th><th></th></tr></thead><tbody id="users-tbl"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ─── LOYALTY PAGE ─── -->
+    <div class="page" id="page-loyalty">
+      <div class="ph">
+        <div><div class="ph-title">Chương Trình Thành Viên</div><div class="ph-sub">Điểm tích lũy & hạng thành viên</div></div>
+        <div class="ph-acts">
+          <button class="btn btn-ghost btn-sm" onclick="exportLoyalty()">📥 Xuất CSV</button>
+        </div>
+      </div>
+      <!-- Summary stats -->
+      <div class="stats-row" id="ly-stats"></div>
+      <!-- Tier distribution -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-head"><div class="card-title">🏅 Phân Bổ Hạng Thành Viên</div></div>
+        <div style="padding:16px;display:flex;gap:10px;flex-wrap:wrap" id="ly-tier-dist"></div>
+      </div>
+      <!-- Members table -->
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">👥 Danh Sách Thành Viên</div>
+          <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+            <select class="tour-sel" id="ly-filter-tier" onchange="renderLoyalty()">
+              <option value="">Tất cả hạng</option>
+              <option value="diamond">💎 Diamond</option>
+              <option value="platinum">💜 Platinum</option>
+              <option value="gold">🥇 Gold</option>
+              <option value="silver">🥈 Silver</option>
+              <option value="bronze">🥉 Bronze</option>
+            </select>
+            <div class="sbar" style="max-width:200px"><span class="sbar-ico">🔍</span><input id="ly-q" placeholder="Tên, SĐT..." oninput="renderLoyalty()"></div>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr>
+              <th>Khách Hàng</th><th>SĐT</th><th>Hạng</th>
+              <th>Điểm Hiện Tại</th><th>Tổng Điểm</th>
+              <th>Số Tour</th><th>Chi Tiêu</th>
+              <th>Sinh Nhật</th><th>Điểm Đến Hạng Sau</th>
+            </tr></thead>
+            <tbody id="ly-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS PAGE ─── -->
+    <div class="page" id="page-settings">
+      <div class="ph"><div><div class="ph-title">Cài Đặt Hệ Thống</div><div class="ph-sub">Quy đổi điểm & hạng thành viên</div></div></div>
+
+      <!-- Quy đổi điểm -->
+      <div class="set-section">
+        <div class="set-title">⭐ Quy Tắc Tích Điểm</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-bottom:16px">
+          <div class="fg">
+            <label>Tỷ Lệ Quy Đổi</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="number" id="set-rate" value="10000" style="width:110px;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
+              <span style="font-size:12px;color:var(--ink4)">đ = 1 điểm</span>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Điểm Bonus Sinh Nhật</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="number" id="set-bday-pts" value="200" style="width:110px;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
+              <span style="font-size:12px;color:var(--ink4)">điểm</span>
+            </div>
+          </div>
+          <div class="fg">
+            <label>Điểm Bonus Referral</label>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="number" id="set-ref-pts" value="100" style="width:110px;padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
+              <span style="font-size:12px;color:var(--ink4)">điểm/người</span>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--sky-ll);border-radius:9px;padding:12px 15px;font-size:12px;color:var(--ink3);line-height:1.7">
+          💡 <b>Ví dụ:</b> Tour Phú Quốc 4N3Đ = 5.500.000đ → <span id="set-example">550 điểm</span>
+        </div>
+      </div>
+
+      <!-- Cấu hình hạng -->
+      <div class="set-section">
+        <div class="set-title">🏅 Ngưỡng Hạng Thành Viên</div>
+        <p style="font-size:12px;color:var(--ink4);margin-bottom:14px">Điểm tích lũy <b>cộng dồn</b> từ tất cả các tour đã đi. Điểm không bao giờ trừ khi lên/xuống hạng.</p>
+        <div id="tier-config-list"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="resetTierDefaults()">↺ Khôi phục mặc định</button>
+      </div>
+
+      <!-- Quyền lợi hạng -->
+      <div class="set-section">
+        <div class="set-title">🎁 Quyền Lợi Theo Hạng</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px" id="tier-benefits"></div>
+      </div>
+
+      <!-- Nhắc sinh nhật -->
+      <div class="set-section">
+        <div class="set-title">🎂 Cài Đặt Nhắc Sinh Nhật</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+          <div class="fg">
+            <label>Nhắc Trước (ngày)</label>
+            <input type="number" id="set-bday-before" value="7" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit">
+          </div>
+          <div class="fg">
+            <label>Tin Nhắn Sinh Nhật</label>
+            <textarea id="set-bday-msg" style="padding:8px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;resize:vertical;min-height:60px">Chúc mừng sinh nhật {name}! 🎂 Sky Tours tặng bạn {pts} điểm thưởng. Liên hệ ngay để nhận ưu đãi tour đặc biệt!</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:right">
+        <button class="btn btn-sky" onclick="saveSettings()">💾 Lưu Cài Đặt</button>
+      </div>
+    </div>
+
+  </div><!-- /pg-wrap -->
+
+  <!-- MOBILE NAV -->
+  <div class="mob-nav">
+    <div class="mob-nav-items">
+      <div class="mnb on" onclick="showPage('leads')"><div class="mi">📋</div><div class="ml">Leads</div></div>
+      <div class="mnb hidden" id="mn-search" onclick="showPage('search')"><div class="mi">🔍</div><div class="ml">Tra cứu</div></div>
+      <div class="mnb" onclick="showPage('reminders')"><div class="mi">🔔</div><div class="ml">Nhắc</div></div>
+      <div class="mnb hidden" id="mn-dash" onclick="showPage('dashboard')"><div class="mi">📊</div><div class="ml">Dashboard</div></div>
+      <div class="mnb hidden" id="mn-mkt" onclick="showPage('mkt')"><div class="mi">📊</div><div class="ml">Báo Cáo</div></div>
+      <div class="mnb hidden" id="mn-loyalty" onclick="showPage('loyalty')"><div class="mi">⭐</div><div class="ml">TV</div></div>
+      <div class="mnb hidden" id="mn-users" onclick="showPage('users')"><div class="mi">👥</div><div class="ml">Users</div></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ══ MODALS ════════════════════════════════════ -->
+
+<!-- New Lead -->
+<div class="overlay" id="m-new-lead">
+  <div class="modal" style="max-width:560px">
+    <div class="mh"><div class="mt">Thêm Lead Mới</div><button class="mx" onclick="closeModal('m-new-lead')">✕</button></div>
+    <div class="form-grid">
+      <div class="fg"><label>Tên Khách / Công Ty *</label><input id="f-name" placeholder="Nguyễn Văn A / Công ty ABC"></div>
+      <div class="fg"><label>Số Điện Thoại *</label><input id="f-phone" type="tel" placeholder="0901234567"></div>
+      <div class="fg"><label>Email</label><input id="f-email" type="email" placeholder="email@gmail.com"></div>
+      <div class="fg"><label>Nguồn</label>
+        <select id="f-src"><option>Facebook</option><option>Instagram</option><option>Zalo</option><option>Google</option><option>Referral</option><option>Khác</option></select>
+      </div>
+      <div class="fg"><label>Loại Khách</label>
+        <select id="f-ctype" onchange="toggleCompanyField('f')">
+          <option value="Cá nhân">👤 Cá nhân</option>
+          <option value="Khách Công Ty">🏢 Khách Công Ty</option>
+          <option value="Khách Đại Lý">🤝 Khách Đại Lý</option>
+        </select>
+      </div>
+      <div class="fg" id="f-company-wrap" style="display:none"><label>Tên Công Ty / Đại Lý</label><input id="f-company" placeholder="Công ty TNHH ABC"></div>
+      <div class="fg fc2"><label>Tour Quan Tâm</label>
+        <select id="f-tour" onchange="autoPrice('f-tour','f-tp')">
+          <option>Tour Đà Lạt 3N2Đ</option><option>Tour Phú Quốc 4N3Đ</option>
+          <option>Tour Hội An 2N1Đ</option><option>Tour Sapa 3N2Đ</option>
+          <option>Tour Nha Trang 4N3Đ</option><option>Tour Hạ Long 3N2Đ</option>
+        </select>
+      </div>
+      <div class="fg"><label>Công Ty Tổ Chức</label>
+        <select id="f-organizer">
+          <option value="HanoiSkyTours">HanoiSkyTours</option>
+          <option value="Gửi">Gửi (outsource)</option>
+          <option value="Đối tác">Đối tác</option>
+          <option value="Khác">Khác</option>
+        </select>
+      </div>
+      <div class="fg"><label>Sale Phụ Trách</label><select id="f-sale"></select></div>
+      <div class="fg"><label>Giá Niêm Yết (đ)</label><input id="f-tp" type="number" placeholder="Tự điền"></div>
+      <div class="fg"><label>Giá KM (đ)</label><input id="f-sp" type="number" placeholder="Trống = giá NL"></div>
+      <div class="fg"><label>Số Pax</label><input id="f-pax" type="number" placeholder="1" value="1"></div>
+      <div class="fg"><label>Ngày Dự Kiến Đi</label><input id="f-depdate" type="date"></div>
+      <div class="fg"><label>Ngày Sinh Khách</label><input id="f-birthday" type="date" placeholder="dd/mm/yyyy"></div>
+      <div class="fg fc2"><label>Ghi Chú</label><textarea id="f-note" placeholder="Yêu cầu đặc biệt, thời gian dự kiến..."></textarea></div>
+    </div>
+    <div id="f-old-info" style="display:none;margin-bottom:12px;padding:10px 13px;background:var(--purple-l);border-radius:9px;border:1px solid #C4B5FD;font-size:12px;color:#4C1D95"></div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-new-lead')">Hủy</button><button class="btn btn-sky" onclick="saveLead()">Lưu Lead →</button></div></div>
+  </div>
+</div>
+
+<!-- Edit Lead -->
+<div class="overlay" id="m-edit-lead">
+  <div class="modal" style="max-width:560px">
+    <div class="mh"><div class="mt">Chỉnh Sửa Lead</div><button class="mx" onclick="closeModal('m-edit-lead')">✕</button></div>
+    <div class="form-grid">
+      <div class="fg"><label>Tên *</label><input id="e-name"></div>
+      <div class="fg"><label>SĐT *</label><input id="e-phone" type="tel"></div>
+      <div class="fg"><label>Email</label><input id="e-email" type="email"></div>
+      <div class="fg"><label>Nguồn</label><select id="e-src"><option>Facebook</option><option>Instagram</option><option>Zalo</option><option>Google</option><option>Referral</option><option>Khác</option></select></div>
+      <div class="fg"><label>Loại Khách</label>
+        <select id="e-ctype" onchange="toggleCompanyField('e')">
+          <option value="Cá nhân">👤 Cá nhân</option>
+          <option value="Khách Công Ty">🏢 Khách Công Ty</option>
+          <option value="Khách Đại Lý">🤝 Khách Đại Lý</option>
+        </select>
+      </div>
+      <div class="fg" id="e-company-wrap"><label>Tên Công Ty / Đại Lý</label><input id="e-company"></div>
+      <div class="fg fc2"><label>Tour</label>
+        <select id="e-tour" onchange="autoPrice('e-tour','e-tp')">
+          <option>Tour Đà Lạt 3N2Đ</option><option>Tour Phú Quốc 4N3Đ</option>
+          <option>Tour Hội An 2N1Đ</option><option>Tour Sapa 3N2Đ</option>
+          <option>Tour Nha Trang 4N3Đ</option><option>Tour Hạ Long 3N2Đ</option>
+        </select>
+      </div>
+      <div class="fg"><label>Công Ty Tổ Chức</label>
+        <select id="e-organizer">
+          <option value="HanoiSkyTours">HanoiSkyTours</option>
+          <option value="Gửi">Gửi (outsource)</option>
+          <option value="Đối tác">Đối tác</option>
+          <option value="Khác">Khác</option>
+        </select>
+      </div>
+      <div class="fg"><label>Sale</label><select id="e-sale"></select></div>
+      <div class="fg"><label>Giá NL (đ)</label><input id="e-tp" type="number"></div>
+      <div class="fg"><label>Giá KM (đ)</label><input id="e-sp" type="number"></div>
+      <div class="fg"><label>Pax</label><input id="e-pax" type="number"></div>
+      <div class="fg"><label>Ngày Đi</label><input id="e-depdate" type="date"></div>
+      <div class="fg"><label>Ngày Sinh Khách</label><input id="e-birthday" type="date"></div>
+      <div class="fg"><label>Trạng Thái</label>
+        <select id="e-status" onchange="toggleChot('e')">
+          <option>Tiềm năng</option><option>Đang tư vấn</option><option>Đã chốt</option><option>Không chốt</option>
+        </select>
+      </div>
+      <div class="fg" id="e-val-wrap" style="display:none"><label>Hợp Đồng (đ)</label><input id="e-val" type="number"></div>
+      <div class="fg" id="e-paid-wrap" style="display:none"><label>Đã Thu (đ)</label><input id="e-paid" type="number"></div>
+      <div class="fg fc2"><label>Ghi Chú</label><textarea id="e-note"></textarea></div>
+    </div>
+    <div class="fa">
+      <button class="btn btn-red btn-sm" id="del-btn">🗑 Xóa Lead</button>
+      <div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-edit-lead')">Hủy</button><button class="btn btn-sky" onclick="saveEdit()">Lưu →</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Status -->
+<div class="overlay" id="m-status">
+  <div class="modal" style="max-width:500px">
+    <div class="mh"><div class="mt" id="m-status-title">Cập Nhật Trạng Thái</div><button class="mx" onclick="closeModal('m-status')">✕</button></div>
+    <div class="form-grid">
+
+      <!-- Resale progress indicator -->
+      <div class="fc2" id="resale-progress" style="display:none">
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px;border:1px solid var(--border)">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink4);margin-bottom:10px">Tiến Trình Resale</div>
+          <div style="display:flex;gap:6px;align-items:center" id="resale-steps"></div>
+        </div>
+      </div>
+
+      <div class="fg fc2"><label>Trạng Thái Mới</label>
+        <select id="s-status" onchange="toggleChot('s')">
+          <option>Tiềm năng</option><option>Đang tư vấn</option><option>Đã chốt</option><option>Không chốt</option>
+        </select>
+      </div>
+      <div class="fg" id="s-val-wrap" style="display:none"><label>Hợp Đồng (đ)</label><input id="s-val" type="number" placeholder="0"></div>
+      <div class="fg" id="s-paid-wrap" style="display:none"><label>Đã Thu (đ)</label><input id="s-paid" type="number" placeholder="0"></div>
+
+      <!-- Resale section — chỉ hiện khi chưa chốt/không chốt -->
+      <div id="s-resale-wrap" class="fg fc2">
+        <label id="s-resale-lbl">Kết Quả Lần Gọi Này</label>
+        <select id="s-resale">
+          <option value="">-- Không ghi nhận --</option>
+          <option value="Đã gọi">✅ Đã gọi — khách nghe máy</option>
+          <option value="Không nghe máy">📵 Không nghe máy</option>
+          <option value="Hẹn lại">📅 Hẹn gọi lại</option>
+          <option value="Đang cân nhắc">🤔 Đang cân nhắc</option>
+          <option value="Cần báo giá lại">💰 Cần báo giá lại</option>
+        </select>
+      </div>
+      <div class="fg fc2" id="s-resale-note-wrap">
+        <label>Ghi Chú Lần Gọi Này</label>
+        <textarea id="s-resale-note" placeholder="Khách phản hồi thế nào? Cần theo dõi điểm gì?" style="min-height:60px"></textarea>
+      </div>
+      <div class="fg fc2"><label>🔔 Ngày Nhắc Gọi Lại</label><input id="s-remind" type="date"></div>
+
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border)">
+      <div id="s-resale-count" style="font-size:11px;color:var(--ink4)"></div>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-ghost" onclick="closeModal('m-status')">Hủy</button>
+        <button class="btn btn-sky" onclick="saveStatus()">Lưu →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Payment -->
+<div class="overlay" id="m-pay">
+  <div class="modal" style="max-width:380px">
+    <div class="mh"><div class="mt">💰 Ghi Thu Tiền</div><button class="mx" onclick="closeModal('m-pay')">✕</button></div>
+    <div id="pay-info" style="background:var(--bg);border-radius:9px;padding:12px 14px;margin-bottom:14px;font-size:13px"></div>
+    <div class="fg"><label>Số Tiền Thu (đ) *</label><input id="pay-amt" type="number" placeholder="0" oninput="payPreview()"></div>
+    <div class="fg"><label>Ghi Chú</label><input id="pay-note" placeholder="Cọc / Thanh toán đủ..."></div>
+    <div id="pay-prev"></div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-pay')">Hủy</button><button class="btn btn-sky" onclick="savePay()">Xác Nhận →</button></div></div>
+  </div>
+</div>
+
+<!-- MKT Entry -->
+<div class="overlay" id="m-mkt">
+  <div class="modal" style="max-width:500px">
+    <div class="mh"><div class="mt">Thêm Chi Phí MKT</div><button class="mx" onclick="closeModal('m-mkt')">✕</button></div>
+    <div class="form-grid">
+      <div class="fg"><label>Tháng</label><select id="m-month"><option>Tháng 2/2025</option><option>Tháng 3/2025</option><option>Tháng 4/2025</option></select></div>
+      <div class="fg"><label>Ngày</label><input id="m-date" type="date"></div>
+      <div class="fg fc2"><label>Tour</label><select id="m-tour"><option>Tour Đà Lạt 3N2Đ</option><option>Tour Phú Quốc 4N3Đ</option><option>Tour Hội An 2N1Đ</option><option>Tour Sapa 3N2Đ</option></select></div>
+      <div class="fg"><label>Kênh</label><select id="m-ch"><option>Facebook Ads</option><option>Instagram Ads</option><option>Google Ads</option><option>TikTok Ads</option></select></div>
+      <div class="fg"><label>Ngân Sách (đ)</label><input id="m-budget" type="number" placeholder="5000000"></div>
+      <div class="fg"><label>Impression</label><input id="m-imp" type="number"></div>
+      <div class="fg"><label>Click</label><input id="m-click" type="number"></div>
+      <div class="fg"><label>Lead Thu Về</label><input id="m-leads" type="number"></div>
+      <div class="fg"><label>Đã Chốt</label><input id="m-closed" type="number"></div>
+    </div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-mkt')">Hủy</button><button class="btn btn-sky" onclick="saveMkt()">Lưu →</button></div></div>
+  </div>
+</div>
+
+<!-- User Modal -->
+<div class="overlay" id="m-user">
+  <div class="modal" style="max-width:520px">
+    <div class="mh"><div class="mt" id="um-title">Tạo User Mới</div><button class="mx" onclick="closeModal('m-user')">✕</button></div>
+    <div class="form-grid">
+      <div class="fg"><label>Họ & Tên *</label><input id="u-name"></div>
+      <div class="fg"><label>Username *</label><input id="u-uname" placeholder="vd: minh.sale" oninput="this.value=this.value.toLowerCase().replace(/\s/g,'')"></div>
+      <div class="fg"><label>Mật Khẩu</label>
+        <div style="position:relative"><input type="password" id="u-pass" placeholder="Tối thiểu 6 ký tự" style="width:100%;padding-right:38px"><span onclick="var i=document.getElementById('u-pass');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--ink4)">👁</span></div>
+      </div>
+      <div class="fg"><label>Xác Nhận MK</label><input type="password" id="u-pass2"></div>
+      <div class="fg fc2"><label>Vai Trò *</label>
+        <select id="u-role" onchange="document.getElementById('u-tw').style.display=this.value==='sale'?'block':'none'">
+          <option value="sale">💼 Sale</option><option value="chat">💬 Chat FB</option><option value="admin">🛡 Admin</option>
+        </select>
+      </div>
+      <div class="fg fc2" id="u-tw"><label>Tour Phụ Trách <small style="font-weight:400;text-transform:none;font-size:10px;color:var(--ink4)">(Ctrl = chọn nhiều)</small></label>
+        <select id="u-tours" multiple style="height:90px">
+          <option>Tour Đà Lạt 3N2Đ</option><option>Tour Phú Quốc 4N3Đ</option>
+          <option>Tour Hội An 2N1Đ</option><option>Tour Sapa 3N2Đ</option>
+          <option>Tour Nha Trang 4N3Đ</option><option>Tour Hạ Long 3N2Đ</option>
+        </select>
+      </div>
+      <div class="fg"><label>Email</label><input id="u-email" type="email"></div>
+      <div class="fg"><label>SĐT</label><input id="u-phone" type="tel"></div>
+      <div class="fg fc2"><label>Trạng Thái</label><select id="u-status"><option value="active">✅ Hoạt động</option><option value="locked">🔒 Khóa</option></select></div>
+    </div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-user')">Hủy</button><button class="btn btn-sky" id="u-save-btn" onclick="saveUser()">Tạo User →</button></div></div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div class="overlay" id="m-chpw">
+  <div class="modal" style="max-width:380px">
+    <div class="mh"><div class="mt">Đổi Mật Khẩu</div><button class="mx" onclick="closeModal('m-chpw')">✕</button></div>
+    <div style="background:var(--sky-ll);border-radius:9px;padding:10px 13px;font-size:12px;color:var(--sky-d);margin-bottom:14px">Đổi MK cho: <b id="cp-lbl"></b></div>
+    <div class="fg"><label>Mật Khẩu Mới *</label><input type="password" id="cp-new" placeholder="Tối thiểu 6 ký tự"></div>
+    <div class="fg"><label>Xác Nhận *</label><input type="password" id="cp-new2"></div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-chpw')">Hủy</button><button class="btn btn-sky" onclick="saveChPw()">Lưu →</button></div></div>
+  </div>
+</div>
+
+<!-- Loyalty Adjust Points -->
+<div class="overlay" id="m-pts">
+  <div class="modal" style="max-width:400px">
+    <div class="mh"><div class="mt">⭐ Điều Chỉnh Điểm</div><button class="mx" onclick="closeModal('m-pts')">✕</button></div>
+    <div id="pts-info" style="background:var(--bg);border-radius:9px;padding:12px 14px;margin-bottom:14px;font-size:13px"></div>
+    <div class="fg"><label>Loại Điều Chỉnh</label>
+      <select id="pts-type">
+        <option value="add">➕ Cộng điểm thưởng</option>
+        <option value="sub">➖ Trừ điểm (đổi quà)</option>
+        <option value="set">📌 Đặt điểm cố định</option>
+      </select>
+    </div>
+    <div class="fg"><label>Số Điểm</label><input type="number" id="pts-amt" min="0" placeholder="0"></div>
+    <div class="fg"><label>Lý Do</label><input id="pts-reason" placeholder="Sinh nhật / Đổi quà / Điều chỉnh..."></div>
+    <div class="fa"><div></div><div class="fa-r"><button class="btn btn-ghost" onclick="closeModal('m-pts')">Hủy</button><button class="btn btn-sky" onclick="savePoints()">Xác Nhận →</button></div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══ SCRIPTS ════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const TOUR_P = {
+  'Tour Đà Lạt 3N2Đ':2800000,'Tour Phú Quốc 4N3Đ':5500000,
+  'Tour Hội An 2N1Đ':1800000,'Tour Sapa 3N2Đ':3200000,
+  'Tour Nha Trang 4N3Đ':4800000,'Tour Hạ Long 3N2Đ':4200000
+};
+
+// ── LOYALTY SETTINGS (editable by CMO) ──
+let LOYALTY_CFG = {
+  rate: 10000,        // bao nhiêu đồng = 1 điểm
+  bdayPts: 200,       // điểm thưởng sinh nhật
+  refPts: 100,        // điểm referral
+  bdayBefore: 7,      // nhắc trước bao nhiêu ngày
+  bdayMsg: 'Chúc mừng sinh nhật {name}! 🎂 Sky Tours tặng bạn {pts} điểm thưởng. Liên hệ ngay để nhận ưu đãi tour đặc biệt!',
+  tiers: [
+    {key:'diamond', label:'💎 Diamond', min:5000, color:'#0891B2', fillColor:'linear-gradient(90deg,#22D3EE,#0891B2)', benefit:'Giảm 15% + VIP lounge + quà tặng cao cấp'},
+    {key:'platinum', label:'💜 Platinum', min:2000, color:'#7C3AED', fillColor:'linear-gradient(90deg,#A78BFA,#7C3AED)', benefit:'Giảm 10% + ưu tiên đặt chỗ + quà tặng'},
+    {key:'gold',    label:'🥇 Gold',    min:1000, color:'#D97706', fillColor:'linear-gradient(90deg,#FCD34D,#D97706)', benefit:'Giảm 7% + check-in ưu tiên'},
+    {key:'silver',  label:'🥈 Silver',  min:500,  color:'#64748B', fillColor:'linear-gradient(90deg,#CBD5E1,#64748B)', benefit:'Giảm 5% mọi tour'},
+    {key:'bronze',  label:'🥉 Bronze',  min:1,    color:'#B45309', fillColor:'linear-gradient(90deg,#FDE68A,#B45309)', benefit:'Giảm 3% tour tiếp theo'},
+  ]
+};
+const ACCOUNTS = {
+  cmo: {name:'Vitgia',type:'admin',av:'C'},
+  minh:{name:'Minh Sale',type:'sale',av:'M',assignedTo:'Minh Sale'},
+  lan: {name:'Lan Sale',type:'sale',av:'L',assignedTo:'Lan Sale'},
+  tuan:{name:'Tuấn Sale',type:'sale',av:'T',assignedTo:'Tuấn Sale'},
+  chat:{name:'Chat FB',type:'chat',av:'F'}
+};
+
+let LEADS = [
+  {id:'L001',date:'01/02/2025',name:'Nguyễn Văn An',phone:'0901234567',email:'an@gmail.com',
+   tour:'Tour Đà Lạt 3N2Đ',source:'Facebook',sale:'Minh Sale',status:'Tiềm năng',
+   ctype:'Cá nhân',company:'',organizer:'HanoiSkyTours',pax:2,depdate:'15/03/2025',birthday:'',
+   tourPrice:2800000,salePrice:2800000,value:null,paid:0,remindDate:'27/02/2025',
+   resale:[],note:'Muốn đi tháng 3, cần khách sạn 4 sao'},
+  {id:'L002',date:'02/02/2025',name:'Trần Thị Bình',phone:'0912345678',email:'',
+   tour:'Tour Phú Quốc 4N3Đ',source:'Facebook',sale:'Lan Sale',status:'Đang tư vấn',
+   ctype:'Cá nhân',company:'',organizer:'HanoiSkyTours',pax:1,depdate:'',birthday:'',
+   tourPrice:5500000,salePrice:5200000,value:null,paid:0,remindDate:'27/02/2025',
+   resale:[{result:'Đã gọi',note:'Khách hỏi thêm về phòng khách sạn',date:'20/02/2025'}],note:'Đang cân nhắc, hỏi thêm tour'},
+  {id:'L003',date:'03/02/2025',name:'Lê Hoàng Cường',phone:'0923456789',email:'cuong@yahoo.com',
+   tour:'Tour Hội An 2N1Đ',source:'Zalo',sale:'Minh Sale',status:'Đã chốt',
+   ctype:'Cá nhân',company:'',organizer:'HanoiSkyTours',pax:3,depdate:'20/03/2025',birthday:'',
+   tourPrice:1800000,salePrice:1700000,value:5100000,paid:2000000,remindDate:null,
+   resale:[{result:'Đã gọi',note:'Khách đồng ý, cần xác nhận ngày',date:'15/02/2025'},{result:'Đã gọi',note:'Chốt tour tháng 3',date:'18/02/2025'}],note:'Chốt 3 pax tour tháng 3'},
+  {id:'L004',date:'04/02/2025',name:'Phạm Thị Dung',phone:'0934567890',email:'',
+   tour:'Tour Sapa 3N2Đ',source:'Facebook',sale:'Lan Sale',status:'Không chốt',
+   ctype:'Cá nhân',company:'',organizer:'HanoiSkyTours',pax:2,depdate:'',birthday:'',
+   tourPrice:3200000,salePrice:3000000,value:null,paid:0,remindDate:null,
+   resale:[{result:'Không nghe máy',note:'',date:'14/02/2025'},{result:'Đã gọi',note:'Khách bận, hẹn sau',date:'17/02/2025'},{result:'Đã gọi',note:'Khách hủy do kế hoạch thay đổi',date:'21/02/2025'}],note:'Hủy do bận việc'},
+  {id:'L005',date:'05/02/2025',name:'Công ty ABC',phone:'0945678901',email:'abc@company.vn',
+   tour:'Tour Đà Lạt 3N2Đ',source:'Referral',sale:'Tuấn Sale',status:'Đang tư vấn',
+   ctype:'Khách Công Ty',company:'Công ty TNHH ABC',organizer:'HanoiSkyTours',pax:20,depdate:'10/04/2025',birthday:'',
+   tourPrice:2800000,salePrice:2600000,value:null,paid:0,remindDate:'28/02/2025',
+   resale:[{result:'Đã gọi',note:'Đang xin duyệt ngân sách nội bộ',date:'19/02/2025'}],note:'Team building 20 người, cần xe riêng'},
+  {id:'L006',date:'06/02/2025',name:'Hoàng Văn Bình',phone:'0956789012',email:'',
+   tour:'Tour Nha Trang 4N3Đ',source:'Google',sale:'Tuấn Sale',status:'Đang tư vấn',
+   ctype:'Cá nhân',company:'',organizer:'Gửi',pax:2,depdate:'',birthday:'',
+   tourPrice:4800000,salePrice:4500000,value:null,paid:0,remindDate:'28/02/2025',
+   resale:[{result:'Không nghe máy',note:'',date:'22/02/2025'}],note:'Tour gửi qua đối tác'},
+  {id:'L007',date:'07/02/2025',name:'Đỗ Thị Cẩm',phone:'0967890123',email:'cam@gmail.com',
+   tour:'Tour Hạ Long 3N2Đ',source:'Facebook',sale:'Minh Sale',status:'Đã chốt',
+   ctype:'Cá nhân',company:'',organizer:'HanoiSkyTours',pax:2,depdate:'01/03/2025',birthday:'',
+   tourPrice:4200000,salePrice:4000000,value:8000000,paid:8000000,remindDate:null,
+   resale:[{result:'Đã gọi',note:'Chốt ngay lần đầu',date:'08/02/2025'}],note:'Thanh toán đủ'},
+  {id:'L008',date:'08/02/2025',name:'Đại lý Viettravel HN',phone:'0978901234',email:'vtt@agency.vn',
+   tour:'Tour Phú Quốc 4N3Đ',source:'Referral',sale:'Lan Sale',status:'Tiềm năng',
+   ctype:'Khách Đại Lý',company:'Viettravel Hà Nội',organizer:'HanoiSkyTours',pax:15,depdate:'',birthday:'',
+   tourPrice:5500000,salePrice:5000000,value:null,paid:0,remindDate:'01/03/2025',
+   resale:[],note:'Đại lý cần giá sỉ cho nhóm 15 người'}
+];
+
+const CUSTOMERS = {
+  '0923456789':{name:'Lê Hoàng Cường',phone:'0923456789',email:'cuong@yahoo.com',
+    birthday:'1988-03-15', note:'Khách VIP, hay đi gia đình',
+    points:1380, totalPoints:1380, pointsHistory:[
+      {date:'15/05/2024',desc:'Tour Hạ Long 3N2Đ',delta:+720,type:'earn'},
+      {date:'20/09/2024',desc:'Tour Đà Nẵng 4N3Đ',delta:+630,type:'earn'},
+      {date:'15/03/2024',desc:'🎂 Sinh nhật',delta:+200,type:'bonus'},
+      {date:'01/01/2025',desc:'Đổi quà Tết',delta:-170,type:'redeem'}
+    ],
+    tours:[{name:'Tour Hạ Long 3N2Đ',date:'15/05/2024',spent:7200000},{name:'Tour Đà Nẵng 4N3Đ',date:'20/09/2024',spent:6300000}]},
+  '0901234567':{name:'Nguyễn Văn An',phone:'0901234567',email:'an@gmail.com',
+    birthday:'1992-07-22', note:'Thích tour biển',
+    points:480, totalPoints:480, pointsHistory:[
+      {date:'10/07/2024',desc:'Tour Nha Trang 4N3Đ',delta:+480,type:'earn'}
+    ],
+    tours:[{name:'Tour Nha Trang 4N3Đ',date:'10/07/2024',spent:4800000}]},
+  '0912345678':{name:'Trần Thị Bình',phone:'0912345678',email:'',
+    birthday:'1990-12-05', note:'Đi cùng gia đình',
+    points:570, totalPoints:600, pointsHistory:[
+      {date:'25/12/2023',desc:'Tour Đà Lạt 3N2Đ',delta:+280,type:'earn'},
+      {date:'01/04/2024',desc:'Tour Sapa 3N2Đ',delta:+320,type:'earn'},
+      {date:'01/01/2025',desc:'Đổi voucher',delta:-30,type:'redeem'}
+    ],
+    tours:[{name:'Tour Đà Lạt 3N2Đ',date:'25/12/2023',spent:2800000},{name:'Tour Sapa 3N2Đ',date:'01/04/2024',spent:3200000}]},
+  '0945678901':{name:'Công ty ABC',phone:'0945678901',email:'abc@company.vn',
+    birthday:'', note:'Khách doanh nghiệp',
+    points:0, totalPoints:0, pointsHistory:[],
+    tours:[]},
+  '0967890123':{name:'Đỗ Thị Cẩm',phone:'0967890123',email:'cam@gmail.com',
+    birthday:'1995-11-28', note:'Thanh toán nhanh',
+    points:800, totalPoints:800, pointsHistory:[
+      {date:'01/03/2025',desc:'Tour Hạ Long 3N2Đ',delta:+800,type:'earn'}
+    ],
+    tours:[{name:'Tour Hạ Long 3N2Đ',date:'01/03/2025',spent:8000000}]}
+};
+
+let MKT = [
+  {id:'M001',month:'Tháng 2/2025',date:'01/02',tour:'Tour Đà Lạt 3N2Đ',channel:'Facebook Ads',budget:5000000,imp:120000,click:850,leads:42,closed:8},
+  {id:'M002',month:'Tháng 2/2025',date:'01/02',tour:'Tour Phú Quốc 4N3Đ',channel:'Facebook Ads',budget:8000000,imp:200000,click:1200,leads:65,closed:15},
+  {id:'M003',month:'Tháng 2/2025',date:'05/02',tour:'Tour Hội An 2N1Đ',channel:'Instagram Ads',budget:3000000,imp:80000,click:600,leads:28,closed:5},
+  {id:'M004',month:'Tháng 2/2025',date:'07/02',tour:'Tour Sapa 3N2Đ',channel:'Google Ads',budget:6000000,imp:150000,click:950,leads:38,closed:7}
+];
+
+let USERS = [
+  {id:'u1',name:'Vitgia',username:'cmo',role:'admin',email:'admin@hanoiskytours.com',phone:'0900000001',tours:[],status:'active',created:'01/01/2025',lastLogin:'27/02/2025'},
+  {id:'u2',name:'Minh Sale',username:'minh',role:'sale',email:'minh@hanoiskytours.com',phone:'0901111111',tours:['Tour Đà Lạt 3N2Đ','Tour Hội An 2N1Đ','Tour Hạ Long 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'27/02/2025'},
+  {id:'u3',name:'Lan Sale',username:'lan',role:'sale',email:'lan@hanoiskytours.com',phone:'0902222222',tours:['Tour Phú Quốc 4N3Đ','Tour Sapa 3N2Đ'],status:'active',created:'15/01/2025',lastLogin:'26/02/2025'},
+  {id:'u4',name:'Tuấn Sale',username:'tuan',role:'sale',email:'tuan@hanoiskytours.com',phone:'0903333333',tours:['Tour Nha Trang 4N3Đ'],status:'active',created:'20/01/2025',lastLogin:'25/02/2025'},
+  {id:'u5',name:'Chat FB',username:'chat',role:'chat',email:'chat@hanoiskytours.com',phone:'0904444444',tours:[],status:'active',created:'01/02/2025',lastLogin:'27/02/2025'}
+];
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let CU = null;        // current user
+let SFILTER = 'all';  // status filter
+let ACT_LEAD = null;  // active lead id
+let EDIT_UID = null;  // editing user id
+let CHPW_UID = null;  // changing pw user id
+let PAY_LID = null;   // paying lead id
+let ACT_PHONE = null; // active phone for points adjust
+let PEND_UP = null;   // pending upload rows
+let DEL_ARMED = false;// delete armed state
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const fV = v => v ? v.toLocaleString('vi-VN')+'đ' : '—';
+const fM = v => v>=1e6 ? (v/1e6).toFixed(1)+'M' : v>=1e3 ? Math.round(v/1e3)+'K' : String(v||0);
+function viDate(s){
+  if(!s)return new Date(0);
+  const p=s.split('/');
+  return p.length===3?new Date(+p[2],+p[1]-1,+p[0]):new Date(s);
+}
+
+let _tt;
+function toast(msg,type='ok'){
+  const t=$('toast'); t.textContent=msg; t.className='show '+type;
+  clearTimeout(_tt); _tt=setTimeout(()=>t.className='',3200);
+}
+
+function openModal(id){$(id).classList.add('on')}
+function closeModal(id){$(id).classList.remove('on')}
+
+function sbadge(s){
+  const cls={'Tiềm năng':'bb','Đang tư vấn':'bo','Đã chốt':'bg','Không chốt':'br'};
+  const dot={'Tiềm năng':'🔵','Đang tư vấn':'🟡','Đã chốt':'🟢','Không chốt':'🔴'};
+  return `<span class="badge ${cls[s]||'bgray'}">${dot[s]||''}${s}</span>`;
+}
+function rbadge(s){
+  const c={Chưa:'bgray','Đã gọi':'bg','Không nghe máy':'br','Hẹn lại':'bo'};
+  return `<span class="badge ${c[s]||'bgray'}">${s}</span>`;
+}
+function ctypeBadge(t){
+  if(t==='Khách Công Ty') return '<span class="lt-company">🏢 CT</span>';
+  if(t==='Khách Đại Lý')  return '<span class="lt-agency">🤝 ĐL</span>';
+  return '<span class="lt-personal">👤</span>';
+}
+function irow(l,v){return `<div class="ic-row"><span class="ic-lbl">${l}</span><span class="ic-val">${v}</span></div>`}
+
+// ── LOYALTY HELPERS ──
+function getTier(pts){
+  const t=LOYALTY_CFG.tiers;
+  for(let i=0;i<t.length;i++) if(pts>=t[i].min) return t[i];
+  return null;
+}
+function tierBadge(pts){
+  const t=getTier(pts);
+  if(!t) return '<span class="tier tier-none">Chưa có hạng</span>';
+  return `<span class="tier tier-${t.key}">${t.label}</span>`;
+}
+function ptsToEarn(spent){return Math.floor(spent/LOYALTY_CFG.rate)}
+function bdayStr(bd){
+  // bd = 'YYYY-MM-DD'
+  if(!bd) return null;
+  const d=new Date(bd);
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function isBdaySoon(bd, daysBefore){
+  if(!bd) return false;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const d=new Date(bd);
+  // Sinh nhật năm nay
+  const bday=new Date(today.getFullYear(), d.getMonth(), d.getDate());
+  if(bday<today) bday.setFullYear(today.getFullYear()+1);
+  const diff=Math.ceil((bday-today)/(1000*60*60*24));
+  return diff>=0 && diff<=daysBefore;
+}
+function isBdayToday(bd){
+  if(!bd) return false;
+  const today=new Date();
+  const d=new Date(bd);
+  return d.getDate()===today.getDate() && d.getMonth()===today.getMonth();
+}
+function ptsToNextTier(pts){
+  const tiers=LOYALTY_CFG.tiers;
+  for(let i=tiers.length-1;i>=0;i--){
+    if(pts<tiers[i].min) return {tier:tiers[i],need:tiers[i].min-pts};
+  }
+  return null; // đã max
+}
+function getCustomerByPhone(ph){ return CUSTOMERS[ph]||null; }
+function ensureCustomer(lead){
+  if(!CUSTOMERS[lead.phone]){
+    CUSTOMERS[lead.phone]={
+      name:lead.name, phone:lead.phone, email:lead.email||'',
+      birthday:lead.birthday||'', note:'',
+      points:0, totalPoints:0, pointsHistory:[], tours:[]
+    };
+  }
+  if(lead.birthday && !CUSTOMERS[lead.phone].birthday)
+    CUSTOMERS[lead.phone].birthday=lead.birthday;
+  return CUSTOMERS[lead.phone];
+}
+function addPoints(phone, delta, desc, type='earn'){
+  const c=CUSTOMERS[phone]; if(!c) return;
+  c.points=Math.max(0,(c.points||0)+delta);
+  if(delta>0) c.totalPoints=(c.totalPoints||0)+delta;
+  c.pointsHistory=c.pointsHistory||[];
+  c.pointsHistory.unshift({date:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),desc,delta,type});
+}
+
+// ══════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════
+function setDemo(u){$('li-u').value=u;$('li-p').value='123456'}
+
+function doLogin(){
+  const u=$('li-u').value.trim(), p=$('li-p').value.trim();
+  if(!ACCOUNTS[u]||p!=='123456'){toast('❌ Sai tài khoản / mật khẩu','err');return}
+  CU={...ACCOUNTS[u],username:u};
+  $('login-screen').style.display='none';
+  $('app').classList.add('on');
+  $('uav').textContent=CU.av;
+  $('unm').textContent=CU.name;
+
+  // Reset tất cả nav về hidden trước
+  ['dn-search','dn-dash','dn-mkt','dn-loyalty','dn-settings','dn-users'].forEach(id=>$(id)?.classList.add('hidden'));
+  ['mn-search','mn-dash','mn-mkt','mn-loyalty','mn-users'].forEach(id=>$(id)?.classList.add('hidden'));
+
+  // Hiện đúng tab theo role
+  if(CU.type==='admin'){
+    ['dn-search','dn-dash','dn-mkt','dn-loyalty','dn-settings','dn-users'].forEach(id=>$(id)?.classList.remove('hidden'));
+    ['mn-dash','mn-mkt','mn-loyalty','mn-users'].forEach(id=>$(id)?.classList.remove('hidden'));
+  } else if(CU.type==='sale'){
+    $('dn-search')?.classList.remove('hidden');
+    $('mn-search')?.classList.remove('hidden');
+  } else if(CU.type==='chat'){
+    // chat chỉ thấy leads
+  }
+
+  // Về trang leads
+  showPage('leads');
+  refreshSaleDD();
+  renderLeads(); renderStats(); renderReminders();
+  toast('👋 Chào '+CU.name+'!');
+}
+
+function showLogout(){$('lout-box').classList.toggle('on')}
+function hideLogout(){$('lout-box').classList.remove('on')}
+function doLogout(){
+  hideLogout(); CU=null;
+  // Reset nav về mặc định
+  ['dn-search','dn-dash','dn-mkt','dn-loyalty','dn-settings','dn-users'].forEach(id=>$(id)?.classList.add('hidden'));
+  ['mn-search','mn-dash','mn-mkt','mn-loyalty','mn-users'].forEach(id=>$(id)?.classList.add('hidden'));
+  $('app').classList.remove('on');
+  $('login-screen').style.display='';
+}
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function showPage(pg){
+  // Guard: chặn truy cập trang không có quyền
+  const adminOnly=['dashboard','mkt','loyalty','settings','users'];
+  if(adminOnly.includes(pg) && CU?.type!=='admin'){
+    toast('⛔ Không có quyền truy cập','err'); return;
+  }
+  const saleAndAbove=['search'];
+  if(saleAndAbove.includes(pg) && CU?.type==='chat'){
+    toast('⛔ Không có quyền truy cập','err'); return;
+  }
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.nb,.mnb').forEach(el=>el.classList.remove('on'));
+  $('page-'+pg)?.classList.add('on');
+  document.querySelectorAll(`[onclick*="'${pg}'"]`).forEach(el=>el.classList.add('on'));
+  $('notif-p').classList.remove('on');
+  $('lout-box').classList.remove('on');
+  if(pg==='dashboard')renderDashboard();
+  if(pg==='mkt'){renderReport();renderMkt();renderMktStats()}
+  if(pg==='loyalty'){renderLoyalty();renderLoyaltyStats()}
+  if(pg==='settings')renderSettings();
+  if(pg==='users')renderUsers();
+  if(pg==='reminders')renderReminders();
+}
+
+function toggleNotif(){$('notif-p').classList.toggle('on');$('lout-box').classList.remove('on')}
+
+// ══════════════════════════════════════════════════
+// STATUS FILTER — onclick trực tiếp, không delegation
+// ══════════════════════════════════════════════════
+function setStatusFilter(el){
+  document.querySelectorAll('.sf-chips .sf-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  SFILTER = el.dataset.v;
+  renderLeads();
+}
+
+// ══════════════════════════════════════════════════
+// LEADS — GET FILTERED
+// ══════════════════════════════════════════════════
+function getLeads(){
+  let arr = [...LEADS];
+
+  // Role filter
+  if(CU?.type==='sale') arr=arr.filter(l=>l.sale===CU.assignedTo);
+
+  // Search
+  const q=($('lead-q')?.value||'').toLowerCase().trim();
+  if(q) arr=arr.filter(l=>
+    l.name.toLowerCase().includes(q)||l.phone.includes(q)||
+    l.tour.toLowerCase().includes(q)||(l.note||'').toLowerCase().includes(q)||
+    (l.company||'').toLowerCase().includes(q)
+  );
+
+  // Status chip
+  if(SFILTER!=='all') arr=arr.filter(l=>l.status===SFILTER);
+
+  // Tour dropdown
+  const tf = $('tour-filter')?.value||'';
+  if(tf) arr=arr.filter(l=>l.tour===tf);
+
+  // Adv filters
+  const as=$('af-sale')?.value, ax=$('af-src')?.value;
+  const at=$('af-type')?.value, ah=$('af-hist')?.value;
+  const af=$('af-from')?.value, ato=$('af-to')?.value;
+  if(as) arr=arr.filter(l=>l.sale===as);
+  if(ax) arr=arr.filter(l=>l.source===ax);
+  if(at) arr=arr.filter(l=>l.ctype===at);
+  if(ah==='old') arr=arr.filter(l=>!!CUSTOMERS[l.phone]);
+  if(ah==='new') arr=arr.filter(l=>!CUSTOMERS[l.phone]);
+  if(af) arr=arr.filter(l=>viDate(l.date)>=new Date(af));
+  if(ato) arr=arr.filter(l=>viDate(l.date)<=new Date(ato+'T23:59'));
+  return arr;
+}
+
+// ══════════════════════════════════════════════════
+// RENDER LEADS TABLE
+// ══════════════════════════════════════════════════
+function renderLeads(){
+  const arr=getLeads();
+  const sub=CU?.type==='sale'?`Lead của ${CU.name} (${arr.length})`:`${arr.length} leads`;
+  $('leads-sub').textContent=sub;
+
+  // Update tour filter active state
+  const tf=$('tour-filter')?.value||'';
+  $('tour-filter')?.classList.toggle('active-filter',!!tf);
+
+  const tb=$('leads-tbody');
+  if(!arr.length){
+    tb.innerHTML=`<tr><td colspan="12"><div class="empty"><div class="empty-ico">📭</div><div class="empty-t">Không có lead nào</div><div>Thử đổi bộ lọc</div></div></td></tr>`;
+    return;
+  }
+  tb.innerHTML=arr.map(l=>{
+    const tp=l.tourPrice||0, sp=l.salePrice||tp, ct=l.value||sp, pd=l.paid||0;
+    const rem=l.status==='Đã chốt'?Math.max(0,ct-pd):null;
+    const disc=sp<tp&&tp>0;
+    const hist=CUSTOMERS[l.phone];
+    const orgBadge=l.organizer==='Gửi'?'<span class="badge bt" style="font-size:9px">Gửi</span>':
+                   l.organizer&&l.organizer!=='HanoiSkyTours'?`<span class="badge bgray" style="font-size:9px">${l.organizer}</span>`:'';
+
+    return `<tr onclick="openDetail('${l.id}')">
+      <td>
+        <div style="font-weight:600;font-size:13px">${l.name}</div>
+        <div style="display:flex;align-items:center;gap:4px;margin-top:2px">
+          ${ctypeBadge(l.ctype)}
+          ${l.company?`<span style="font-size:10px;color:var(--ink4)">${l.company}</span>`:''}
+        </div>
+        <div style="font-size:10px;color:var(--ink4);margin-top:1px">${l.date}${l.pax>1?` · ${l.pax} pax`:''}</div>
+      </td>
+      <td>
+        <a href="tel:${l.phone}" onclick="event.stopPropagation()" style="color:var(--sky);font-weight:600;font-size:12.5px">${l.phone}</a>
+        <div style="font-size:10px;color:var(--ink4)">${l.source}</div>
+      </td>
+      <td style="font-weight:600;font-size:12px;max-width:110px;white-space:normal">${l.tour}</td>
+      <td style="font-size:11px">${orgBadge||'<span style="color:var(--ink4)">HST</span>'}</td>
+      <td style="font-size:12px;${disc?'text-decoration:line-through;color:var(--ink4)':''}">${tp?fV(tp):'—'}</td>
+      <td>${disc?`<b style="color:var(--red);font-size:12px">${fV(sp)}</b><div style="font-size:9px;color:var(--red)">-${Math.round((1-sp/tp)*100)}%</div>`:'<span style="color:var(--ink4)">—</span>'}</td>
+      <td style="font-size:12px">${l.sale}</td>
+      <td>${sbadge(l.status)}</td>
+      <td style="font-weight:700;color:var(--green);font-size:12px">${l.status==='Đã chốt'?fV(pd):'<span style="color:var(--ink4)">—</span>'}</td>
+      <td>${rem!==null?(rem>0?`<b style="color:var(--orange);font-size:12px">${fV(rem)}</b>`:'<span class="badge bg" style="font-size:10px">✅ Đủ</span>'):'<span style="color:var(--ink4)">—</span>'}</td>
+      <td>${hist?'<span class="tag-old">✅ Cũ</span>':'<span class="tag-new">🆕 Mới</span>'}</td>
+      <td onclick="event.stopPropagation()">
+        <div style="display:flex;gap:3px">
+          <button class="act" onclick="openDetail('${l.id}')">🔍</button>
+          <button class="act" onclick="openEditLead('${l.id}')">✏️</button>
+          ${l.status==='Đã chốt'&&pd<ct?`<button class="act" style="color:var(--green);border-color:var(--green)" onclick="openPay('${l.id}')">💰</button>`:''}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderStats(){
+  const arr=CU?.type==='sale'?LEADS.filter(l=>l.sale===CU.assignedTo):LEADS;
+  const chot=arr.filter(l=>l.status==='Đã chốt');
+  const ds=chot.reduce((a,l)=>a+(l.paid||0),0);
+  const rem=arr.filter(l=>l.remindDate).length;
+  $('stats-row').innerHTML=`
+    <div class="stat"><div class="stat-ic ic-b">📋</div><div><div class="sv">${arr.length}</div><div class="sl">Tổng Lead</div></div></div>
+    <div class="stat"><div class="stat-ic ic-o">💬</div><div><div class="sv">${arr.filter(l=>l.status==='Đang tư vấn').length}</div><div class="sl">Đang TV</div></div></div>
+    <div class="stat"><div class="stat-ic ic-g">✅</div><div><div class="sv">${chot.length}</div><div class="sl">Đã Chốt</div></div></div>
+    <div class="stat"><div class="stat-ic ic-gd">💰</div><div><div class="sv">${fM(ds)}</div><div class="sl">Đã Thu</div></div></div>
+    <div class="stat"><div class="stat-ic ic-r">🔔</div><div><div class="sv">${rem}</div><div class="sl">Cần Resale</div></div></div>`;
+  const rb=$('rb-cnt');
+  if(rb){rb.textContent=rem||'';rb.style.display=rem?'inline':'none'}
+  $('bell-cnt').textContent=rem+1;
+}
+
+// ══════════════════════════════════════════════════
+// LEAD DETAIL
+// ══════════════════════════════════════════════════
+function openDetail(lid){
+  ACT_LEAD=lid;
+  const l=LEADS.find(x=>x.id===lid); if(!l)return;
+  showPage('detail');
+  $('d-title').textContent=l.name;
+  $('d-sub').textContent=`${l.id} · ${l.tour}`;
+  const hist=CUSTOMERS[l.phone];
+  const tp=l.tourPrice||0,sp=l.salePrice||tp,ct=l.value||sp,pd=l.paid||0,rem=Math.max(0,ct-pd);
+  const pct=ct>0?Math.min(100,Math.round(pd/ct*100)):0;
+
+  $('detail-body').innerHTML=`
+    <div>
+      <div class="ic">
+        <div class="ic-ttl">📋 Thông Tin Lead</div>
+        ${irow('Họ tên',`<b>${l.name}</b>`)}
+        ${irow('Loại khách',ctypeBadge(l.ctype)+(l.company?` <span style="font-size:11px">${l.company}</span>`:'' ))}
+        ${irow('SĐT',`<a href="tel:${l.phone}" style="color:var(--sky)">${l.phone}</a>`)}
+        ${l.email?irow('Email',l.email):''}
+        ${irow('Tour',`<b>${l.tour}</b>`)}
+        ${irow('C.Ty Tổ Chức',l.organizer||'HanoiSkyTours')}
+        ${irow('Số Pax',l.pax||1+' người')}
+        ${l.depdate?irow('Ngày Đi',l.depdate):''}
+        ${irow('Nguồn',l.source)}
+        ${irow('Ngày vào',l.date)}
+        ${irow('Trạng thái',sbadge(l.status))}
+        ${irow('Sale PT',l.sale)}
+      </div>
+      ${tp?`<div class="ic">
+        <div class="ic-ttl">💰 Giá & Thanh Toán</div>
+        ${irow('Giá niêm yết',sp<tp?`<span style="text-decoration:line-through;color:var(--ink4)">${fV(tp)}</span>`:fV(tp))}
+        ${sp<tp?irow('Giá KM',`<b style="color:var(--red)">${fV(sp)} <span style="font-size:10px;background:var(--red-l);padding:1px 5px;border-radius:4px">-${Math.round((1-sp/tp)*100)}%</span></b>`):''}
+        ${l.pax>1?irow('Tổng pax',`${l.pax} × ${fV(sp)} = <b style="color:var(--sky)">${fV(sp*l.pax)}</b>`):''}
+        ${l.status==='Đã chốt'?irow('Hợp đồng',`<b>${fV(ct)}</b>`):''}
+        ${l.status==='Đã chốt'?irow('Đã thu',`<b style="color:var(--green)">${fV(pd)}</b>`):''}
+        ${l.status==='Đã chốt'?irow('Còn lại',rem>0?`<b style="color:var(--orange)">${fV(rem)}</b>`:'<span class="badge bg">✅ Đủ</span>'):''}
+        ${l.status==='Đã chốt'?`<div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div><div style="font-size:10px;color:var(--ink4);text-align:center">${pct}% thanh toán</div>`:''}
+      </div>`:''}
+      <div class="ic">
+        <div class="ic-ttl">📞 Lịch Sử Resale</div>
+        ${(()=>{
+          const rs=l.resale||[];
+          if(!rs.length) return '<div style="font-size:12px;color:var(--ink4)">Chưa liên hệ lần nào</div>';
+          return rs.map((r,i)=>`
+            <div style="padding:9px 11px;background:var(--bg);border-radius:8px;border:1px solid var(--border);margin-bottom:6px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:${r.note?'5px':'0'}">
+                <span style="font-size:11px;font-weight:700;color:var(--ink4)">Lần ${i+1}</span>
+                <span style="font-size:10px;color:var(--ink4)">${r.date||''}</span>
+                ${rbadge(r.result)}
+              </div>
+              ${r.note?`<div style="font-size:12px;color:var(--ink3);line-height:1.5">${r.note}</div>`:''}
+            </div>`).join('');
+        })()}
+        ${l.remindDate?irow('🔔 Nhắc lại',`<b style="color:var(--orange)">${l.remindDate}</b>`):''}
+      </div>
+      ${l.note?`<div class="ic"><div class="ic-ttl">📝 Ghi Chú</div><div style="font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--ink)">${l.note}</div></div>`:''}
+    </div>
+    <div>
+      ${hist?`<div class="ic" style="background:linear-gradient(135deg,#FAF5FF,var(--purple-l))">
+        <div class="ic-ttl" style="color:var(--purple)">🏅 Khách Cũ — ${hist.tours.length} Tour</div>
+        ${hist.tours.map(t=>`<div class="tl"><div class="tl-ico">✈️</div><div><div style="font-size:12px;font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--ink4)">${t.date} · ${fV(t.spent)}</div></div></div>`).join('')}
+        <div style="margin-top:8px;background:var(--green-l);border-radius:7px;padding:9px 11px;font-size:11px;color:#065F46">
+          💡 Chưa đi: ${Object.keys(TOUR_P).filter(t=>!hist.tours.find(x=>x.name===t)).slice(0,2).join(', ')||'Đã đi hết'}
+        </div>
+      </div>`:`<div class="ic"><div class="ic-ttl">🆕 Khách Mới</div><div style="font-size:12px;color:var(--ink4)">Chưa có lịch sử tour</div></div>`}
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <button class="btn btn-sky" style="width:100%;justify-content:center" onclick="openStatusModal()">📝 Cập Nhật TT</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="openEditLead(ACT_LEAD)">✏️ Chỉnh Sửa</button>
+        ${(()=>{const l2=LEADS.find(x=>x.id===ACT_LEAD);return l2&&l2.status==='Đã chốt'&&(l2.paid||0)<(l2.value||l2.salePrice||0)?`<button class="btn btn-green" style="width:100%;justify-content:center" onclick="openPay(ACT_LEAD)">💰 Ghi Thu Tiền</button>`:''})()}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// NEW LEAD
+// ══════════════════════════════════════════════════
+function toggleCompanyField(p){
+  const v=$(p+'-ctype').value;
+  $(p+'-company-wrap').style.display=(v==='Khách Công Ty'||v==='Khách Đại Lý')?'block':'none';
+}
+function autoPrice(tEl,pEl){
+  const p=TOUR_P[$( tEl).value]||0;
+  if(p)$(pEl).value=p;
+}
+function checkOld(phone){
+  const c=CUSTOMERS[phone],box=$('f-old-info');
+  if(c&&phone.length>=9){
+    box.style.display='block';
+    box.innerHTML=`<b style="color:var(--purple)">✅ Khách cũ</b> — Đã đi: ${c.tours.map(t=>t.name).join(', ')}`;
+  } else box.style.display='none';
+}
+function openNewLead(){
+  ['f-name','f-email','f-note','f-tp','f-sp','f-company'].forEach(i=>{const el=$(i);if(el)el.value=''});
+  $('f-phone').value=''; $('f-src').value='Facebook'; $('f-ctype').value='Cá nhân';
+  $('f-organizer').value='HanoiSkyTours'; $('f-pax').value=1; $('f-depdate').value='';
+  $('f-tour').value='Tour Đà Lạt 3N2Đ'; autoPrice('f-tour','f-tp');
+  $('f-company-wrap').style.display='none'; $('f-old-info').style.display='none';
+  openModal('m-new-lead');
+}
+function saveLead(){
+  const name=$('f-name').value.trim(), phone=$('f-phone').value.trim();
+  if(!name||!phone){toast('Nhập tên và SĐT','err');return}
+  const tp=+$('f-tp').value||0, sp=+$('f-sp').value||tp;
+  const newId='L'+String(LEADS.length+1).padStart(3,'0');
+  const bd=$('f-birthday').value||'';
+  LEADS.unshift({
+    id:newId,
+    date:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),
+    name,phone,email:$('f-email').value.trim(),
+    tour:$('f-tour').value,source:$('f-src').value,
+    sale:CU?.type==='chat'?'':$('f-sale').value,
+    status:'Tiềm năng',
+    ctype:$('f-ctype').value,
+    company:$('f-company').value.trim(),
+    organizer:$('f-organizer').value,
+    pax:+$('f-pax').value||1,
+    depdate:$('f-depdate').value,
+    birthday:bd,
+    tourPrice:tp,salePrice:sp,value:null,paid:0,
+    remindDate:null,resale:[],
+    note:$('f-note').value.trim()
+  });
+  // Tạo/cập nhật customer record
+  ensureCustomer(LEADS[0]);
+  closeModal('m-new-lead');
+  renderLeads(); renderStats();
+  toast('✅ Đã thêm: '+name);
+}
+
+// ══════════════════════════════════════════════════
+// EDIT LEAD
+// ══════════════════════════════════════════════════
+function openEditLead(lid){
+  const l=LEADS.find(x=>x.id===lid); if(!l)return;
+  ACT_LEAD=lid; DEL_ARMED=false;
+  const db=$('del-btn');
+  if(db){db.textContent='🗑 Xóa Lead';db.style.background='';db.style.color=''}
+  $('e-name').value=l.name; $('e-phone').value=l.phone; $('e-email').value=l.email||'';
+  $('e-src').value=l.source||'Facebook'; $('e-tour').value=l.tour;
+  $('e-organizer').value=l.organizer||'HanoiSkyTours';
+  $('e-tp').value=l.tourPrice||''; $('e-sp').value=l.salePrice&&l.salePrice!==l.tourPrice?l.salePrice:'';
+  $('e-pax').value=l.pax||1; $('e-depdate').value=l.depdate||'';
+  $('e-birthday').value=l.birthday||'';
+  $('e-ctype').value=l.ctype||'Cá nhân'; $('e-company').value=l.company||'';
+  $('e-note').value=l.note||''; $('e-status').value=l.status;
+  $('e-val').value=l.value||''; $('e-paid').value=l.paid||'';
+  toggleCompanyField('e'); toggleChot('e');
+  const sel=$('e-sale');
+  sel.innerHTML=USERS.filter(u=>u.role==='sale'&&u.status==='active').map(u=>`<option${u.name===l.sale?' selected':''}>${u.name}</option>`).join('');
+  openModal('m-edit-lead');
+}
+function toggleChot(p){
+  const on=$(p+'-status').value==='Đã chốt';
+  [p+'-val-wrap',p+'-paid-wrap'].forEach(id=>{const el=$(id);if(el)el.style.display=on?'block':'none'});
+}
+function saveEdit(){
+  const l=LEADS.find(x=>x.id===ACT_LEAD); if(!l)return;
+  const name=$('e-name').value.trim(), phone=$('e-phone').value.trim();
+  if(!name||!phone){toast('Nhập tên và SĐT','err');return}
+  const tp=+$('e-tp').value||0, sp=+$('e-sp').value||tp;
+  Object.assign(l,{name,phone,email:$('e-email').value.trim(),source:$('e-src').value,
+    tour:$('e-tour').value,organizer:$('e-organizer').value,
+    ctype:$('e-ctype').value,company:$('e-company').value.trim(),
+    sale:$('e-sale').value,status:$('e-status').value,
+    pax:+$('e-pax').value||1,depdate:$('e-depdate').value,
+    birthday:$('e-birthday').value||l.birthday||'',
+    tourPrice:tp,salePrice:sp,note:$('e-note').value.trim()});
+  if(l.status==='Đã chốt'){
+    l.value=+$('e-val').value||sp*l.pax;l.paid=+$('e-paid').value||0;
+    // Cộng điểm tự động khi chốt (nếu chưa cộng)
+    if(!l._pointsAwarded){
+      ensureCustomer(l);
+      const pts=ptsToEarn(l.value||sp*l.pax);
+      if(pts>0){addPoints(l.phone,pts,l.tour,'earn');l._pointsAwarded=true;}
+    }
+  }
+  if(l.birthday) ensureCustomer(l);
+  closeModal('m-edit-lead');
+  if($('page-detail').classList.contains('on'))openDetail(ACT_LEAD);
+  renderLeads(); renderStats();
+  toast('✅ Đã cập nhật: '+name);
+}
+function armDelete(){
+  if(!DEL_ARMED){
+    DEL_ARMED=true;
+    const db=$('del-btn');
+    db.textContent='⚠️ Xác nhận xóa?';
+    db.style.background='var(--red)'; db.style.color='#fff';
+    setTimeout(()=>{DEL_ARMED=false;if(db){db.textContent='🗑 Xóa Lead';db.style.background='';db.style.color=''}},3000);
+    return;
+  }
+  const l=LEADS.find(x=>x.id===ACT_LEAD); if(!l)return;
+  LEADS.splice(LEADS.indexOf(l),1);
+  closeModal('m-edit-lead'); showPage('leads'); renderLeads(); renderStats();
+  toast('🗑 Đã xóa: '+l.name);
+}
+
+// ══════════════════════════════════════════════════
+// STATUS UPDATE
+// ══════════════════════════════════════════════════
+function openStatusModal(){
+  const l=LEADS.find(x=>x.id===ACT_LEAD); if(!l)return;
+  l.resale=l.resale||[];
+  const cnt=l.resale.length;
+  const maxed=cnt>=3;
+
+  // Title
+  $('m-status-title').textContent = cnt===0?'Cập Nhật Trạng Thái':
+    `Cập Nhật — Lần Liên Hệ ${cnt+1}${maxed?' (Tối đa 3 lần)':''}`;
+
+  // Status
+  $('s-status').value=l.status||'Tiềm năng';
+  toggleChot('s');
+
+  // Resale progress steps
+  if(cnt>0||l.status==='Đang tư vấn'||l.status==='Tiềm năng'){
+    $('resale-progress').style.display='';
+    const stepColors={
+      'Đã gọi':'var(--green)','Không nghe máy':'var(--red)',
+      'Hẹn lại':'var(--orange)','Đang cân nhắc':'var(--orange)',
+      'Cần báo giá lại':'var(--purple)'
+    };
+    let stepsHtml='';
+    [0,1,2].forEach(i=>{
+      const r=l.resale[i];
+      const done=!!r;
+      const active=i===cnt;
+      stepsHtml+=`<div style="flex:1;text-align:center">
+        <div style="width:32px;height:32px;border-radius:50%;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+          background:${done?(stepColors[r.result]||'var(--sky)'):'var(--bg)'};
+          border:2px solid ${done?(stepColors[r.result]||'var(--sky)'):active?'var(--sky)':'var(--border)'};
+          color:${done?'#fff':active?'var(--sky)':'var(--ink4)'}">
+          ${done?'✓':i+1}
+        </div>
+        <div style="font-size:9px;color:${done?'var(--ink3)':active?'var(--sky)':'var(--ink4)'};font-weight:${active?'700':'400'}">
+          ${done?r.result:active?'Lần này':'Lần '+(i+1)}
+        </div>
+        ${done&&r.date?`<div style="font-size:8px;color:var(--ink4)">${r.date}</div>`:''}
+      </div>`;
+      if(i<2) stepsHtml+=`<div style="flex:0 0 20px;height:2px;background:${done&&l.resale[i+1]?'var(--sky)':'var(--border)'};margin-top:15px"></div>`;
+    });
+    $('resale-steps').innerHTML=stepsHtml;
+  } else {
+    $('resale-progress').style.display='none';
+  }
+
+  // Resale fields
+  if(maxed || l.status==='Đã chốt' || l.status==='Không chốt'){
+    $('s-resale-wrap').style.display='none';
+    $('s-resale-note-wrap').style.display='none';
+    $('s-resale-count').textContent=maxed?'⚠️ Đã đủ 3 lần resale':'';
+  } else {
+    $('s-resale-wrap').style.display='';
+    $('s-resale-note-wrap').style.display='';
+    $('s-resale-lbl').textContent=`Kết Quả Lần Gọi ${cnt+1}`;
+    $('s-resale-count').textContent=`Đã liên hệ ${cnt}/3 lần`;
+  }
+
+  $('s-resale').value='';
+  $('s-resale-note').value='';
+  $('s-remind').value=l.remindDate?new Date(l.remindDate.split('/').reverse().join('-')).toISOString().slice(0,10):'';
+  openModal('m-status');
+}
+
+function saveStatus(){
+  const l=LEADS.find(x=>x.id===ACT_LEAD); if(!l)return;
+  l.resale=l.resale||[];
+
+  const prevStatus=l.status;
+  l.status=$('s-status').value;
+
+  // Chốt deal
+  if(l.status==='Đã chốt'){
+    l.value=+$('s-val').value||l.salePrice*(l.pax||1)||0;
+    l.paid=+$('s-paid').value||0;
+    if(!l._pointsAwarded){
+      ensureCustomer(l);
+      const pts=ptsToEarn(l.value);
+      if(pts>0){addPoints(l.phone,pts,l.tour,'earn');l._pointsAwarded=true;
+        toast(`⭐ Cộng ${pts} điểm cho ${l.name}!`);}
+    }
+  }
+
+  // Ghi nhận resale lần này
+  const rs=$('s-resale').value;
+  const rsNote=$('s-resale-note').value.trim();
+  if(rs && l.resale.length<3){
+    const today=new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+    l.resale.push({result:rs, note:rsNote, date:today});
+  }
+
+  // Ngày nhắc
+  const rd=$('s-remind').value;
+  l.remindDate=rd?new Date(rd).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}):null;
+
+  closeModal('m-status');
+  if($('page-detail').classList.contains('on')) openDetail(ACT_LEAD);
+  renderLeads(); renderStats();
+
+  // Toast thông minh
+  if(l.status==='Đã chốt') toast('🎉 Chốt deal thành công!');
+  else if(l.status==='Không chốt') toast('📝 Đã ghi nhận không chốt');
+  else if(rs) toast(`✅ Ghi nhận lần liên hệ ${l.resale.length}/3`);
+  else toast('✅ Đã cập nhật trạng thái');
+}
+
+// ══════════════════════════════════════════════════
+// PAYMENT
+// ══════════════════════════════════════════════════
+function openPay(lid){
+  const l=LEADS.find(x=>x.id===lid); if(!l||l.status!=='Đã chốt')return;
+  PAY_LID=lid;
+  const ct=l.value||l.salePrice*l.pax||0,pd=l.paid||0;
+  $('pay-info').innerHTML=`<b>${l.name}</b> · ${l.tour}${l.pax>1?` · ${l.pax} pax`:''}<div style="display:flex;justify-content:space-between;margin-top:7px;font-size:12px"><span>HĐ: <b>${fV(ct)}</b></span><span>Đã thu: <b style="color:var(--green)">${fV(pd)}</b></span><span>Còn: <b style="color:var(--orange)">${fV(ct-pd)}</b></span></div>`;
+  $('pay-amt').value=''; $('pay-note').value=''; $('pay-prev').innerHTML='';
+  openModal('m-pay');
+}
+function payPreview(){
+  const l=LEADS.find(x=>x.id===PAY_LID); if(!l)return;
+  const amt=+$('pay-amt').value||0;
+  if(!amt){$('pay-prev').innerHTML='';return}
+  const ct=l.value||l.salePrice*l.pax||0,pd=l.paid||0,np=pd+amt,rem=Math.max(0,ct-np);
+  const pct=ct?Math.min(100,Math.round(np/ct*100)):0;
+  $('pay-prev').innerHTML=`<div style="background:var(--bg);border-radius:9px;padding:11px;font-size:12px;margin-top:8px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+      <span>Sau thu: <b style="color:var(--green)">${fV(np)}</b></span>
+      <span>Còn: <b style="color:${rem>0?'var(--orange)':'var(--green)'}">${rem>0?fV(rem):'✅ Đủ'}</b></span>
+    </div>
+    <div class="prog"><div class="prog-fill" style="width:${pct}%"></div></div>
+    <div style="text-align:center;color:var(--ink4);margin-top:3px;font-size:11px">${pct}%</div>
+  </div>`;
+}
+function savePay(){
+  const l=LEADS.find(x=>x.id===PAY_LID); if(!l)return;
+  const amt=+$('pay-amt').value;
+  if(!amt||amt<=0){toast('Nhập số tiền hợp lệ','err');return}
+  l.paid=(l.paid||0)+amt;
+  const nt=$('pay-note').value.trim();
+  l.note=(l.note?l.note+'\n':'')+`[${new Date().toLocaleDateString('vi-VN')}] 💰 Thu ${fV(amt)}${nt?' — '+nt:''}`;
+  closeModal('m-pay');
+  if($('page-detail').classList.contains('on'))openDetail(ACT_LEAD);
+  renderLeads(); renderStats();
+  toast('💰 Đã ghi thu: '+fV(amt));
+}
+
+// ══════════════════════════════════════════════════
+// FILTER HELPERS
+// ══════════════════════════════════════════════════
+function toggleAdvFilter(){
+  const el=$('adv-f'); el.classList.toggle('hidden');
+  if(!el.classList.contains('hidden')) refreshAdvSales();
+}
+function refreshAdvSales(){
+  const sel=$('af-sale'); if(!sel)return;
+  const names=[...new Set(LEADS.map(l=>l.sale).filter(Boolean))];
+  sel.innerHTML='<option value="">Tất cả Sale</option>'+names.map(n=>`<option>${n}</option>`).join('');
+}
+function clearFilter(){
+  ['af-sale','af-src','af-type','af-hist'].forEach(i=>{const el=$(i);if(el)el.value=''});
+  ['af-from','af-to'].forEach(i=>{const el=$(i);if(el)el.value=''});
+  renderLeads();
+}
+
+// ══════════════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════════════
+function exportLeads(){
+  const arr=getLeads();
+  const hdr=['ID','Ngày','Tên','SĐT','Email','Loại KH','Công Ty','Tour','C.Ty TC','Nguồn','Sale','TT','Giá NL','Giá KM','Pax','HĐ','Đã Thu','Còn Lại','Ghi Chú'];
+  const rows=arr.map(l=>{const ct=l.value||l.salePrice*l.pax||0,pd=l.paid||0;
+    return[l.id,l.date,l.name,l.phone,l.email||'',l.ctype||'',l.company||'',l.tour,l.organizer||'',l.source,l.sale,l.status,l.tourPrice||0,l.salePrice||0,l.pax||1,ct,pd,Math.max(0,ct-pd),l.note||'']});
+  dlCSV([hdr,...rows],'leads_'+new Date().toLocaleDateString('vi-VN').replace(/\//g,'-')+'.csv');
+  toast('📥 Đã xuất '+arr.length+' leads');
+}
+function exportMkt(){
+  const hdr=['ID','Tháng','Tour','Kênh','Ngân Sách','Lead','Chốt','CPL','CPS'];
+  const rows=MKT.map(m=>[m.id,m.month,m.tour,m.channel,m.budget,m.leads,m.closed,m.leads?Math.round(m.budget/m.leads):0,m.closed?Math.round(m.budget/m.closed):0]);
+  dlCSV([hdr,...rows],'mkt.csv'); toast('📥 Đã xuất MKT');
+}
+function dlCSV(rows,fname){
+  const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download=fname; a.click(); URL.revokeObjectURL(a.href);
+}
+
+// ══════════════════════════════════════════════════
+// CUSTOMER SEARCH
+// ══════════════════════════════════════════════════
+function searchCust(ph){
+  ph=ph.trim(); const r=$('cust-result'); if(!r)return;
+  if(ph.length<8){r.innerHTML='';return}
+  const c=CUSTOMERS[ph];
+  if(!c){r.innerHTML=`<div class="card"><div style="padding:40px;text-align:center"><div style="font-size:40px">🔍</div><div style="font-size:15px;font-weight:600;margin-top:10px;color:var(--ink)">Không tìm thấy SĐT <b>${ph}</b></div><div style="color:var(--ink4);font-size:12px;margin-top:4px">Đây là khách mới</div></div></div>`;return}
+  const ts=c.tours.reduce((a,t)=>a+t.spent,0);
+  r.innerHTML=`<div class="card">
+    <div style="padding:18px 20px;background:linear-gradient(135deg,var(--ink),var(--ink2));display:flex;align-items:center;gap:14px">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:20px;color:#fff;flex-shrink:0">${c.name[0]}</div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">${c.name}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:2px">${c.phone}</div>
+      <div style="margin-top:6px;display:flex;gap:5px"><span class="badge bg">${c.tours.length} tours</span><span class="badge bp">VIP</span></div></div>
+    </div>
+    <div style="padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+      <div>${irow('Năm sinh',c.born||'—')}${irow('Tổng chi tiêu','<b style="color:var(--green)">'+fV(ts)+'</b>')}${irow('Số lần đi',c.tours.length+' tour')}${c.note?irow('Ghi chú',c.note):''}</div>
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4);margin-bottom:10px">Lịch sử tour</div>
+      ${c.tours.map(t=>`<div class="tl"><div class="tl-ico">✈️</div><div><div style="font-size:12px;font-weight:600">${t.name}</div><div style="font-size:11px;color:var(--ink4)">${t.date} · ${fV(t.spent)}</div></div></div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// REMINDERS
+// ══════════════════════════════════════════════════
+function renderReminders(){
+  const arr=(CU?.type==='sale'?LEADS.filter(l=>l.sale===CU.assignedTo):LEADS).filter(l=>l.remindDate);
+  const b=$('remind-body'); if(!b)return;
+
+  // Sinh nhật sắp tới
+  const bdayBefore=LOYALTY_CFG.bdayBefore||7;
+  const bdayList=Object.values(CUSTOMERS).filter(c=>c.birthday&&isBdaySoon(c.birthday,bdayBefore));
+  const bdayToday=bdayList.filter(c=>isBdayToday(c.birthday));
+
+  let html='';
+
+  if(bdayToday.length){
+    html+=`<div class="card" style="margin-bottom:12px;border-color:#FECDD3;background:linear-gradient(135deg,#FFF1F2,#FFE4E6)">
+      <div class="card-head" style="background:transparent;border-color:#FECDD3">
+        <div class="card-title" style="color:#9F1239">🎂 Sinh Nhật Hôm Nay — ${bdayToday.length} khách!</div>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px">
+        ${bdayToday.map(c=>`<div style="background:#fff;border:1px solid #FECDD3;border-radius:10px;padding:10px 13px;min-width:200px">
+          <div style="font-weight:700;font-size:13px;color:var(--ink)">${c.name} 🎂</div>
+          <div style="font-size:11px;color:var(--ink4)">${c.phone}</div>
+          <div style="margin-top:6px;display:flex;gap:5px">
+            ${tierBadge(c.points||0)}
+            <span style="font-size:11px;background:var(--gold-l);color:var(--gold);padding:2px 7px;border-radius:100px;font-weight:600">⭐ ${c.points||0} điểm</span>
+          </div>
+          <a href="tel:${c.phone}" class="btn btn-sky btn-sm" style="margin-top:8px;display:inline-flex">📞 Gọi chúc mừng</a>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  if(bdayList.filter(c=>!isBdayToday(c.birthday)).length){
+    const upcoming=bdayList.filter(c=>!isBdayToday(c.birthday));
+    html+=`<div class="card" style="margin-bottom:12px">
+      <div class="card-head"><div class="card-title">🎁 Sinh Nhật Sắp Tới (${bdayBefore} ngày)</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Khách</th><th>SĐT</th><th>Sinh Nhật</th><th>Hạng</th><th>Điểm</th><th></th></tr></thead>
+      <tbody>${upcoming.map(c=>{
+        const d=new Date(c.birthday);
+        const bday=new Date(new Date().getFullYear(),d.getMonth(),d.getDate());
+        if(bday<new Date()) bday.setFullYear(new Date().getFullYear()+1);
+        const days=Math.ceil((bday-new Date())/(1000*60*60*24));
+        return `<tr>
+          <td style="font-weight:600">${c.name}</td>
+          <td><a href="tel:${c.phone}" style="color:var(--sky)">${c.phone}</a></td>
+          <td><span style="color:var(--red);font-weight:600">🎂 ${bdayStr(c.birthday)} (${days} ngày nữa)</span></td>
+          <td>${tierBadge(c.points||0)}</td>
+          <td style="font-weight:600;color:var(--gold)">⭐ ${c.points||0}</td>
+          <td><a href="tel:${c.phone}" class="btn btn-ghost btn-sm">📞 Gọi</a></td>
+        </tr>`;
+      }).join('')}</tbody></table></div>
+    </div>`;
+  }
+
+  if(!arr.length && !bdayList.length){
+    b.innerHTML=`<div class="card"><div class="empty"><div class="empty-ico">🎉</div><div class="empty-t">Không có nhắc lịch!</div></div></div>`;return;
+  }
+  if(arr.length){
+    html+=`<div class="card"><div class="card-head"><div class="card-title">🔔 ${arr.length} khách cần liên hệ</div></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Khách</th><th>SĐT</th><th>Tour</th><th>Sale</th><th>Ngày Nhắc</th><th>Resale</th><th></th></tr></thead>
+      <tbody>${arr.map(l=>`<tr><td style="font-weight:600">${l.name}${l.ctype!=='Cá nhân'?` <span style="font-size:9px;background:var(--orange-l);color:var(--orange);padding:1px 5px;border-radius:3px">${l.ctype}</span>`:''}</td>
+      <td><a href="tel:${l.phone}" style="color:var(--sky)">${l.phone}</a></td>
+      <td style="font-size:12px">${l.tour}</td>
+      <td style="font-size:12px">${l.sale}</td>
+      <td style="color:var(--orange);font-weight:600;font-size:12px">${l.remindDate}</td>
+      <td>${(()=>{const rs=(l.resale||[]);const last=rs[rs.length-1];return last?rbadge(last.result)+'<span style="font-size:9px;color:var(--ink4);margin-left:3px">'+rs.length+'/3</span>':'<span class="badge bgray">Chưa gọi</span>'})()}</td>
+      <td><a href="tel:${l.phone}" class="btn btn-sky btn-sm">📞 Gọi</a></td>
+      </tr>`).join('')}</tbody></table></div></div>`;
+  }
+  b.innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════
+function renderDashboard(){
+  const total=LEADS.length, chot=LEADS.filter(l=>l.status==='Đã chốt');
+  const rate=total?Math.round(chot.length/total*100):0;
+  const rev=chot.reduce((a,l)=>a+(l.paid||0),0);
+  const corp=LEADS.filter(l=>l.ctype==='Khách Công Ty').length;
+  const agcy=LEADS.filter(l=>l.ctype==='Khách Đại Lý').length;
+  $('db-tot').textContent=total; $('db-chot').textContent=chot.length;
+  $('db-rate').textContent=rate+'%'; $('db-rev').textContent=fM(rev);
+  $('db-corp').textContent=corp; $('db-agency').textContent=agcy;
+
+  // Bar chart
+  const tours=Object.keys(TOUR_P).map(t=>t.replace('Tour ','').split(' ')[0]);
+  const vals=Object.keys(TOUR_P).map(t=>LEADS.filter(l=>l.tour===t).length);
+  const mx=Math.max(...vals,1);
+  $('chart-bars').innerHTML=tours.map((t,i)=>`<div class="bc">
+    <div class="bv">${vals[i]}</div>
+    <div class="bf" style="height:${Math.round(vals[i]/mx*100)+8}px;background:${i%2?'linear-gradient(180deg,#FCD34D,#D97706)':'linear-gradient(180deg,#38BDF8,#0284C7)'}"></div>
+    <div class="bl">${t}</div></div>`).join('');
+
+  // Funnel
+  const funnel=[
+    {l:'Tổng Lead',n:total,p:100,c:'#0EA5E9'},
+    {l:'Đang TV',n:LEADS.filter(l=>l.status==='Đang tư vấn').length,p:total?Math.round(LEADS.filter(l=>l.status==='Đang tư vấn').length/total*100):0,c:'#D97706'},
+    {l:'Đã Chốt',n:chot.length,p:rate,c:'#059669'}
+  ];
+  $('chart-funnel').innerHTML=funnel.map(f=>`<div class="funnel-row">
+    <div class="fn">${f.l}</div>
+    <div class="ft"><div class="ff" style="width:${f.p}%;background:${f.c}">${f.p}%</div></div>
+    <div class="fnn">${f.n}</div></div>`).join('');
+
+  // Sale table
+  const names=[...new Set(LEADS.map(l=>l.sale).filter(Boolean))];
+  $('sale-tbl').innerHTML=names.map(s=>{
+    const my=LEADS.filter(l=>l.sale===s), ch=my.filter(l=>l.status==='Đã chốt');
+    const r=my.length?Math.round(ch.length/my.length*100):0;
+    const hd=ch.reduce((a,l)=>a+(l.value||l.salePrice*l.pax||0),0);
+    const ds=ch.reduce((a,l)=>a+(l.paid||0),0);
+    return `<tr><td style="font-weight:600">${s}</td><td>${my.length}</td><td>${my.filter(l=>l.status==='Đang tư vấn').length}</td><td><span class="badge bg">${ch.length}</span></td>
+    <td style="font-weight:700;color:var(--green)">${r}%</td><td style="font-weight:700;color:var(--sky)">${fM(hd)}</td><td style="font-weight:700;color:var(--gold)">${fM(ds)}</td><td style="font-weight:700;color:var(--orange)">${fM(Math.max(0,hd-ds))}</td></tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// BÁO CÁO — REPORT
+// ══════════════════════════════════════════════════
+let RPT_TAB = 'overview';
+
+function switchRptTab(el){
+  RPT_TAB = el.dataset.rpt;
+  document.querySelectorAll('[data-rpt]').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  $('rpt-overview').style.display = RPT_TAB==='overview'?'':'none';
+  $('rpt-sales').style.display    = RPT_TAB==='sales'?'':'none';
+  $('rpt-mkt').style.display      = RPT_TAB==='mkt'?'':'none';
+  if(RPT_TAB==='overview') renderOverview();
+  if(RPT_TAB==='sales') renderSaleDetail();
+  if(RPT_TAB==='mkt'){renderMkt();renderMktStats();}
+}
+
+function getFilteredLeads(){
+  const mo = $('rpt-month')?.value||'';
+  if(!mo) return LEADS;
+  // filter by month string in date dd/mm/yyyy
+  const [mm,yy] = mo.split('/');
+  return LEADS.filter(l=>{
+    const p=l.date.split('/');
+    return p[1]===mm && p[2]===yy;
+  });
+}
+
+function renderReport(){
+  renderOverview();
+  // reset to overview tab
+  document.querySelectorAll('[data-rpt]').forEach(c=>c.classList.remove('on'));
+  const ov=document.querySelector('[data-rpt="overview"]');
+  if(ov) ov.classList.add('on');
+  $('rpt-overview').style.display='';
+  $('rpt-sales').style.display='none';
+  $('rpt-mkt').style.display='none';
+  RPT_TAB='overview';
+}
+
+function renderOverview(){
+  const leads = getFilteredLeads();
+  const total  = leads.length;
+  const tn     = leads.filter(l=>l.status==='Tiềm năng').length;
+  const tv     = leads.filter(l=>l.status==='Đang tư vấn').length;
+  const chot   = leads.filter(l=>l.status==='Đã chốt').length;
+  const kchot  = leads.filter(l=>l.status==='Không chốt').length;
+  const rate   = total ? (chot/total*100).toFixed(1) : 0;
+  const hd     = leads.filter(l=>l.value).reduce((a,l)=>a+l.value,0);
+  const thu    = leads.reduce((a,l)=>a+(l.paid||0),0);
+  const budget = MKT.reduce((a,m)=>a+m.budget,0);
+  const roi    = budget ? ((hd-budget)/budget*100).toFixed(1) : 0;
+
+  // KPI cards
+  $('rpt-kpis').innerHTML=`
+    <div class="stat"><div class="stat-ic ic-b">📋</div><div><div class="sv">${total}</div><div class="sl">Tổng Lead</div></div></div>
+    <div class="stat"><div class="stat-ic ic-g">✅</div><div><div class="sv">${chot}</div><div class="sl">Đã Chốt</div></div></div>
+    <div class="stat"><div class="stat-ic ic-o">📈</div><div><div class="sv">${rate}%</div><div class="sl">Tỷ Lệ Chốt</div></div></div>
+    <div class="stat"><div class="stat-ic ic-gd">💰</div><div><div class="sv">${fM(hd)}</div><div class="sl">Hợp Đồng</div></div></div>
+    <div class="stat"><div class="stat-ic ic-g">💵</div><div><div class="sv">${fM(thu)}</div><div class="sl">Đã Thu</div></div></div>
+    <div class="stat"><div class="stat-ic ic-p">🔄</div><div><div class="sv">${roi}%</div><div class="sl">ROI Est.</div></div></div>`;
+
+  // Tour bars
+  const tours=[...new Set(leads.map(l=>l.tour).filter(Boolean))];
+  const maxL=Math.max(1,...tours.map(t=>leads.filter(l=>l.tour===t).length));
+  $('rpt-bar-tour').innerHTML=tours.map(t=>{
+    const cnt=leads.filter(l=>l.tour===t).length;
+    const cl=leads.filter(l=>l.tour===t&&l.status==='Đã chốt').length;
+    const pct=Math.round(cnt/maxL*100);
+    return`<div class="bar-item">
+      <div class="bar-label">${t.replace('Tour ','')}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="bar-val">${cnt} lead · ${cl} chốt</div>
+    </div>`;
+  }).join('');
+
+  // Funnel
+  const steps=[['Tổng Lead',total,'#0EA5E9'],['Đang TV',tv,'#D97706'],['Đã Chốt',chot,'#059669'],['Không Chốt',kchot,'#DC2626']];
+  $('rpt-funnel').innerHTML=steps.map(([lb,n,c])=>{
+    const w=total?Math.max(12,Math.round(n/total*100)):0;
+    return`<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px"><span style="color:var(--ink3)">${lb}</span><span style="font-weight:700">${n}</span></div>
+      <div style="background:#E9EFF6;border-radius:6px;height:22px;overflow:hidden">
+        <div style="height:100%;width:${w}%;background:${c};border-radius:6px;display:flex;align-items:center;padding-left:8px;font-size:10px;color:#fff;font-weight:700;transition:width .6s ease">${w}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Sources
+  const srcs=[...new Set(leads.map(l=>l.source).filter(Boolean))];
+  const srcColors={'Facebook':'#1877F2','Instagram':'#E1306C','Zalo':'#0068FF','Google':'#4285F4','Referral':'#059669','Khác':'#94A3B8'};
+  const maxS=Math.max(1,...srcs.map(s=>leads.filter(l=>l.source===s).length));
+  $('rpt-sources').innerHTML=srcs.map(s=>{
+    const cnt=leads.filter(l=>l.source===s).length;
+    const pct=Math.round(cnt/total*100);
+    const h=Math.max(30,Math.round(cnt/maxS*120));
+    const col=srcColors[s]||'#64748B';
+    return`<div style="text-align:center;flex:1;min-width:70px">
+      <div style="display:flex;align-items:flex-end;justify-content:center;height:130px">
+        <div style="width:38px;height:${h}px;background:${col};border-radius:6px 6px 0 0;position:relative" title="${cnt} leads">
+          <div style="position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--ink);white-space:nowrap">${cnt}</div>
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:600;color:var(--ink3);margin-top:5px">${s}</div>
+      <div style="font-size:10px;color:var(--ink4)">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderSaleDetail(){
+  const leads  = getFilteredLeads();
+  const sort   = $('rpt-sale-sort')?.value||'leads';
+  const sales  = [...new Set(LEADS.map(l=>l.sale).filter(Boolean))];
+
+  const data = sales.map(s=>{
+    const sl     = leads.filter(l=>l.sale===s);
+    const total  = sl.length;
+    const tn     = sl.filter(l=>l.status==='Tiềm năng').length;
+    const tv     = sl.filter(l=>l.status==='Đang tư vấn').length;
+    const chot   = sl.filter(l=>l.status==='Đã chốt').length;
+    const kchot  = sl.filter(l=>l.status==='Không chốt').length;
+    const rate   = total ? +(chot/total*100).toFixed(1) : 0;
+    const hd     = sl.filter(l=>l.value).reduce((a,l)=>a+l.value,0);
+    const thu    = sl.reduce((a,l)=>a+(l.paid||0),0);
+    // best tour
+    const tourCnt={};
+    sl.forEach(l=>{if(l.tour)tourCnt[l.tour]=(tourCnt[l.tour]||0)+1});
+    const bestTour=Object.entries(tourCnt).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+    return {s,total,tn,tv,chot,kchot,rate,hd,thu,bestTour};
+  });
+
+  // Sort
+  if(sort==='leads')   data.sort((a,b)=>b.total-a.total);
+  if(sort==='rate')    data.sort((a,b)=>b.rate-a.rate);
+  if(sort==='revenue') data.sort((a,b)=>b.hd-a.hd);
+
+  // Cards
+  const maxHD = Math.max(1,...data.map(d=>d.hd));
+  const tierColors=['#0EA5E9','#7C3AED','#059669','#D97706','#DC2626'];
+  $('rpt-sale-cards').innerHTML = data.map((d,i)=>{
+    const col = tierColors[i%tierColors.length];
+    const hdPct = Math.round(d.hd/maxHD*100);
+    return`<div style="background:var(--surface);border-radius:var(--r2);border:1px solid var(--border);padding:18px;box-shadow:var(--sh1)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:38px;height:38px;border-radius:50%;background:${col};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">${d.s[0]}</div>
+        <div>
+          <div style="font-weight:700;font-size:14px">${d.s}</div>
+          <div style="font-size:11px;color:var(--ink4)">${d.total} leads · ${d.bestTour.replace('Tour ','')}</div>
+        </div>
+        <div style="margin-left:auto;text-align:right">
+          <div style="font-size:20px;font-weight:800;color:${col}">${d.rate}%</div>
+          <div style="font-size:10px;color:var(--ink4)">tỷ lệ chốt</div>
+        </div>
+      </div>
+      <!-- Status pills -->
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+        <span style="padding:3px 9px;border-radius:100px;font-size:10px;font-weight:600;background:var(--sky-l);color:var(--sky-d)">Tiềm năng: ${d.tn}</span>
+        <span style="padding:3px 9px;border-radius:100px;font-size:10px;font-weight:600;background:var(--orange-l);color:var(--orange)">Đang TV: ${d.tv}</span>
+        <span style="padding:3px 9px;border-radius:100px;font-size:10px;font-weight:600;background:var(--green-l);color:var(--green)">Đã chốt: ${d.chot}</span>
+        <span style="padding:3px 9px;border-radius:100px;font-size:10px;font-weight:600;background:var(--red-l);color:var(--red)">Không chốt: ${d.kchot}</span>
+      </div>
+      <!-- Revenue bar -->
+      <div style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:4px">
+          <span style="color:var(--ink4)">Hợp đồng</span>
+          <span style="font-weight:700;color:var(--green)">${fM(d.hd)}</span>
+        </div>
+        <div style="background:#E9EFF6;border-radius:6px;height:8px;overflow:hidden">
+          <div style="height:100%;width:${hdPct}%;background:${col};border-radius:6px;transition:width .6s"></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink4)">
+        <span>Đã thu: <b style="color:var(--ink)">${fM(d.thu)}</b></span>
+        <span>Còn lại: <b style="color:var(--orange)">${fM(Math.max(0,d.hd-d.thu))}</b></span>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Table
+  $('rpt-sale-tbl').innerHTML = data.map((d,i)=>{
+    const rateColor = d.rate>=50?'var(--green)':d.rate>=30?'var(--orange)':'var(--red)';
+    return`<tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;border-radius:50%;background:${tierColors[i%tierColors.length]};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0">${i+1}</div>
+          <span style="font-weight:600">${d.s}</span>
+        </div>
+      </td>
+      <td style="font-weight:700;font-size:15px;text-align:center">${d.total}</td>
+      <td style="text-align:center"><span style="color:var(--sky-d);font-weight:600">${d.tn}</span></td>
+      <td style="text-align:center"><span style="color:var(--orange);font-weight:600">${d.tv}</span></td>
+      <td style="text-align:center"><span style="color:var(--green);font-weight:600">${d.chot}</span></td>
+      <td style="text-align:center"><span style="color:var(--red);font-weight:600">${d.kchot}</span></td>
+      <td style="text-align:center">
+        <span style="font-weight:800;font-size:15px;color:${rateColor}">${d.rate}%</span>
+      </td>
+      <td style="font-weight:700;color:var(--green)">${fM(d.hd)}</td>
+      <td style="font-weight:600;color:var(--sky-d)">${fM(d.thu)}</td>
+      <td style="color:var(--orange)">${fM(Math.max(0,d.hd-d.thu))}</td>
+      <td style="font-size:11px;color:var(--ink4)">${d.bestTour.replace('Tour ','')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function exportReport(){
+  const leads=getFilteredLeads();
+  const sales=[...new Set(LEADS.map(l=>l.sale).filter(Boolean))];
+  const rows=sales.map(s=>{
+    const sl=leads.filter(l=>l.sale===s);
+    const chot=sl.filter(l=>l.status==='Đã chốt').length;
+    const hd=sl.filter(l=>l.value).reduce((a,l)=>a+l.value,0);
+    return[s,sl.length,sl.filter(l=>l.status==='Tiềm năng').length,
+      sl.filter(l=>l.status==='Đang tư vấn').length,chot,
+      sl.filter(l=>l.status==='Không chốt').length,
+      sl.length?(chot/sl.length*100).toFixed(1)+'%':0,hd,sl.reduce((a,l)=>a+(l.paid||0),0)];
+  });
+  dlCSV([['Sale','Tổng Lead','Tiềm Năng','Đang TV','Đã Chốt','Không Chốt','Tỷ Lệ','Hợp Đồng','Đã Thu'],...rows],'bao_cao_sale.csv');
+  toast('📥 Xuất báo cáo xong');
+}
+
+// ══════════════════════════════════════════════════
+// MKT
+// ══════════════════════════════════════════════════
+function renderMkt(){
+  const rows=MKT.map(m=>{
+    const cpl=m.leads?Math.round(m.budget/m.leads):0, cps=m.closed?Math.round(m.budget/m.closed):0;
+    return `<tr><td style="font-size:10px;color:var(--ink4)">${m.id}</td><td style="font-size:11px;color:var(--ink4)">${m.month}</td>
+    <td style="font-size:12px;font-weight:600">${m.tour}</td>
+    <td><span class="badge bb" style="font-size:10px">${m.channel}</span></td>
+    <td style="font-weight:600;color:var(--sky)">${fV(m.budget)}</td>
+    <td>${m.imp.toLocaleString()}</td><td>${m.click.toLocaleString()}</td>
+    <td style="font-weight:600">${m.leads}</td><td>${fV(cpl)}</td>
+    <td><span class="badge bg">${m.closed}</span></td><td style="color:var(--red);font-weight:600">${fV(cps)}</td></tr>`;
+  }).join('');
+  $('mkt-card').innerHTML=`<div class="card-head"><div class="card-title">Chi tiết chiến dịch</div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Tháng</th><th>Tour</th><th>Kênh</th><th>Ngân Sách</th><th>Imp</th><th>Click</th><th>Lead</th><th>CPL</th><th>Chốt</th><th>CPS</th></tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+}
+function renderMktStats(){
+  const tot=MKT.reduce((a,m)=>a+m.budget,0);
+  const tl=MKT.reduce((a,m)=>a+m.leads,0), tc=MKT.reduce((a,m)=>a+m.closed,0);
+  const rev=LEADS.filter(l=>l.status==='Đã chốt').reduce((a,l)=>a+(l.value||l.salePrice*l.pax||0),0);
+  $('ms-budget').textContent=fM(tot);
+  $('ms-cpl').textContent=tl?fM(Math.round(tot/tl)):'0';
+  $('ms-cps').textContent=tc?fM(Math.round(tot/tc)):'0';
+  $('ms-roi').textContent=tot?Math.round((rev-tot)/tot*100)+'%':'0%';
+}
+function saveMkt(){
+  const budget=+$('m-budget').value;
+  if(!budget){toast('Nhập ngân sách','err');return}
+  MKT.push({id:'M'+String(MKT.length+1).padStart(3,'0'),month:$('m-month').value,date:$('m-date').value,
+    tour:$('m-tour').value,channel:$('m-ch').value,budget,
+    imp:+$('m-imp').value||0,click:+$('m-click').value||0,
+    leads:+$('m-leads').value||0,closed:+$('m-closed').value||0});
+  closeModal('m-mkt'); renderMkt(); renderMktStats(); toast('✅ Đã thêm MKT entry');
+}
+function switchMktTab(el){
+  document.querySelectorAll('[data-mkt]').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  $('mkt-upload').style.display=el.dataset.mkt==='upload'?'block':'none';
+}
+
+// ── FILE UPLOAD ──
+function handleFile(file){
+  if(!file)return;
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){const r=new FileReader();r.onload=e=>parseMkt(e.target.result,file.name);r.readAsText(file,'UTF-8')}
+  else if(['xlsx','xls'].includes(ext)){
+    if(typeof XLSX==='undefined'){toast('Đang tải SheetJS...','err');return}
+    const r=new FileReader();r.onload=e=>{
+      const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      parseMkt(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]),file.name);
+    };r.readAsArrayBuffer(file);
+  } else toast('Chỉ nhận CSV hoặc Excel','err');
+}
+function parseMkt(text,fname){
+  const lines=text.trim().split('\n').filter(l=>l.trim()); if(lines.length<2){toast('File trống','err');return}
+  const hdr=lines[0].split(',').map(h=>h.trim().replace(/"/g,'').toLowerCase());
+  const ci={month:hdr.findIndex(h=>h.includes('tháng')||h.includes('month')),
+    tour:hdr.findIndex(h=>h.includes('tour')),
+    channel:hdr.findIndex(h=>h.includes('kênh')||h.includes('channel')||h.includes('kenh')),
+    budget:hdr.findIndex(h=>h.includes('ngân')||h.includes('budget')||h.includes('ngan')),
+    imp:hdr.findIndex(h=>h.includes('impression')),
+    click:hdr.findIndex(h=>h.includes('click')),
+    leads:hdr.findIndex(h=>h.includes('lead')),
+    closed:hdr.findIndex(h=>h.includes('chốt')||h.includes('closed')||h.includes('chot'))};
+  const rows=[], errs=[];
+  lines.slice(1).forEach((line,i)=>{
+    const cols=line.split(',').map(c=>c.trim().replace(/"/g,''));
+    const budget=parseInt((cols[ci.budget]||'').replace(/\D/g,''))||0;
+    if(!budget){errs.push('Hàng '+(i+2)+': thiếu NS');return}
+    rows.push({id:'U'+i,month:ci.month>=0?cols[ci.month]:'Upload',date:'',
+      tour:ci.tour>=0?cols[ci.tour]:'',channel:ci.channel>=0?cols[ci.channel]:'',
+      budget,imp:ci.imp>=0?+cols[ci.imp]||0:0,click:ci.click>=0?+cols[ci.click]||0:0,
+      leads:ci.leads>=0?+cols[ci.leads]||0:0,closed:ci.closed>=0?+cols[ci.closed]||0:0});
+  });
+  PEND_UP=rows;
+  $('upload-prev').innerHTML=`<div class="card" style="margin-top:10px">
+    <div class="card-head"><div class="card-title">📊 Preview: ${fname} — ${rows.length} dòng ${errs.length?`<span style="color:var(--orange)">(${errs.length} lỗi)</span>`:''}</div>
+    <button class="btn btn-sky btn-sm" onclick="importMkt()">✅ Import ${rows.length} dòng</button></div>
+    <div class="tbl-wrap"><table><thead><tr><th>Tour</th><th>Kênh</th><th>NS</th><th>Lead</th><th>Chốt</th></tr></thead>
+    <tbody>${rows.slice(0,5).map(r=>`<tr><td style="font-size:12px">${r.tour||'—'}</td><td><span class="badge bb" style="font-size:10px">${r.channel||'—'}</span></td><td style="font-weight:600">${fV(r.budget)}</td><td>${r.leads}</td><td>${r.closed}</td></tr>`).join('')}
+    ${rows.length>5?`<tr><td colspan="5" style="text-align:center;font-size:11px;color:var(--ink4)">+${rows.length-5} dòng nữa</td></tr>`:''}</tbody></table></div></div>`;
+}
+function importMkt(){
+  if(!PEND_UP?.length)return;
+  MKT.push(...PEND_UP); PEND_UP=null;
+  $('upload-prev').innerHTML=`<div style="padding:14px;background:var(--green-l);border-radius:9px;text-align:center;font-weight:600;color:var(--green);margin-top:10px">✅ Import thành công!</div>`;
+  renderMkt(); renderMktStats(); toast('✅ Import xong!');
+}
+function dlTemplate(e){
+  e.preventDefault();
+  const csv='\uFEFFTháng,Ngày,Tour,Kênh,Ngân Sách,Impression,Click,Lead,Đã Chốt\nTháng 3/2025,01/03/2025,Tour Đà Lạt 3N2Đ,Facebook Ads,5000000,120000,850,42,8';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='mkt_template.csv'; a.click();
+}
+
+// ══════════════════════════════════════════════════
+// USERS
+// ══════════════════════════════════════════════════
+function renderUsers(){
+  const sq=($('user-q')?.value||'').toLowerCase();
+  const arr=sq?USERS.filter(u=>u.name.toLowerCase().includes(sq)||u.username.toLowerCase().includes(sq)):USERS;
+  $('us-tot').textContent=USERS.length;
+  $('us-act').textContent=USERS.filter(u=>u.status==='active').length;
+  $('us-lock').textContent=USERS.filter(u=>u.status==='locked').length;
+  const rl={'admin':'bp',sale:'bb',chat:'bo'}, rn={'admin':'🛡 Admin',sale:'💼 Sale',chat:'💬 Chat'};
+  const tb=$('users-tbl'); if(!tb)return;
+  tb.innerHTML=arr.map(u=>{
+    const gc=u.role==='admin'?'#7C3AED,#5B21B6':u.role==='sale'?'#0EA5E9,#0284C7':'#F97316,#EA580C';
+    const self=CU&&u.username===CU.username;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,${gc});display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:12px;flex-shrink:0">${u.name[0]}</div>
+        <div><div style="font-weight:600;font-size:13px">${u.name}${self?'<span style="font-size:9px;background:var(--sky-l);color:var(--sky);padding:1px 6px;border-radius:4px;font-weight:700;margin-left:5px">Bạn</span>':''}</div>
+        <div style="font-size:11px;color:var(--ink4)">${u.email||'—'}</div></div></div></td>
+      <td><code style="background:var(--bg);padding:2px 7px;border-radius:5px;font-size:12px">${u.username}</code></td>
+      <td><span class="badge ${rl[u.role]||'bgray'}">${rn[u.role]||u.role}</span></td>
+      <td style="font-size:11px;color:var(--ink4)">${u.tours.length?u.tours.map(t=>t.replace('Tour ','')).join(', '):u.role==='admin'?'Tất cả':'—'}</td>
+      <td>${u.status==='active'?'<span class="badge bg">● Active</span>':'<span class="badge br">● Locked</span>'}</td>
+      <td style="font-size:11px;color:var(--ink4)">${u.created}</td>
+      <td style="font-size:11px;color:var(--ink4)">${u.lastLogin||'—'}</td>
+      <td><div style="display:flex;gap:3px">
+        <button class="act" onclick="openEditUser('${u.id}')">✏️</button>
+        <button class="act" onclick="openChPw('${u.id}')">🔑</button>
+        <button class="act" style="${u.status==='active'?'color:var(--red);border-color:var(--red)':'color:var(--green);border-color:var(--green)'}" onclick="toggleUser('${u.id}')">${u.status==='active'?'🔒':'🔓'}</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function openNewUser(){
+  EDIT_UID=null; $('um-title').textContent='Tạo User Mới'; $('u-save-btn').textContent='Tạo User →';
+  ['u-name','u-uname','u-pass','u-pass2','u-email','u-phone'].forEach(i=>$(i).value='');
+  $('u-role').value='sale'; $('u-status').value='active';
+  $('u-tw').style.display='block';
+  Array.from($('u-tours').options).forEach(o=>o.selected=false);
+  openModal('m-user');
+}
+function openEditUser(uid){
+  const u=USERS.find(x=>x.id===uid); if(!u)return;
+  EDIT_UID=uid; $('um-title').textContent='Chỉnh Sửa User'; $('u-save-btn').textContent='Lưu →';
+  $('u-name').value=u.name; $('u-uname').value=u.username;
+  $('u-pass').value=''; $('u-pass2').value='';
+  $('u-email').value=u.email||''; $('u-phone').value=u.phone||'';
+  $('u-role').value=u.role; $('u-status').value=u.status;
+  $('u-tw').style.display=u.role==='sale'?'block':'none';
+  Array.from($('u-tours').options).forEach(o=>o.selected=u.tours.includes(o.value));
+  openModal('m-user');
+}
+function saveUser(){
+  const name=$('u-name').value.trim(), uname=$('u-uname').value.trim();
+  const pass=$('u-pass').value, pass2=$('u-pass2').value;
+  if(!name||!uname){toast('Nhập tên và username','err');return}
+  if(!EDIT_UID&&!pass){toast('Nhập mật khẩu','err');return}
+  if(pass&&pass.length<6){toast('MK ≥ 6 ký tự','err');return}
+  if(pass&&pass!==pass2){toast('MK không khớp','err');return}
+  const tours=Array.from($('u-tours').selectedOptions).map(o=>o.value);
+  const role=$('u-role').value;
+  if(!EDIT_UID){
+    if(USERS.find(u=>u.username===uname)){toast('Username đã tồn tại','err');return}
+    USERS.push({id:'u'+Date.now(),name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,tours,status:$('u-status').value,created:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),lastLogin:'—'});
+    toast('✅ Đã tạo: '+name);
+  } else {
+    if(USERS.find(u=>u.username===uname&&u.id!==EDIT_UID)){toast('Username đã tồn tại','err');return}
+    const u=USERS.find(x=>x.id===EDIT_UID);
+    Object.assign(u,{name,username:uname,role,email:$('u-email').value,phone:$('u-phone').value,tours,status:$('u-status').value});
+    toast('✅ Đã cập nhật: '+name);
+  }
+  closeModal('m-user'); renderUsers(); refreshSaleDD();
+}
+function toggleUser(uid){
+  const u=USERS.find(x=>x.id===uid); if(!u)return;
+  if(u.role==='admin'){toast('Không thể khóa Admin','err');return}
+  u.status=u.status==='active'?'locked':'active';
+  renderUsers(); toast((u.status==='active'?'🔓 Mở khóa: ':'🔒 Đã khóa: ')+u.name);
+}
+function openChPw(uid){
+  const u=USERS.find(x=>x.id===uid); if(!u)return;
+  CHPW_UID=uid; $('cp-lbl').textContent=`${u.name} (@${u.username})`;
+  $('cp-new').value=''; $('cp-new2').value='';
+  openModal('m-chpw');
+}
+function saveChPw(){
+  const p=$('cp-new').value, p2=$('cp-new2').value;
+  if(!p||p.length<6){toast('MK ≥ 6 ký tự','err');return}
+  if(p!==p2){toast('MK không khớp','err');return}
+  closeModal('m-chpw'); toast('✅ Đã đổi mật khẩu');
+}
+
+// ══════════════════════════════════════════════════
+// LOYALTY — THÀNH VIÊN
+// ══════════════════════════════════════════════════
+function renderLoyaltyStats(){
+  const custs=Object.values(CUSTOMERS);
+  const withPts=custs.filter(c=>(c.totalPoints||0)>0);
+  const totalPts=custs.reduce((a,c)=>a+(c.points||0),0);
+  const bdaySoon=custs.filter(c=>c.birthday&&isBdaySoon(c.birthday,LOYALTY_CFG.bdayBefore)).length;
+  const maxTier=LOYALTY_CFG.tiers[0];
+  const vip=custs.filter(c=>getTier(c.totalPoints||0)?.key===maxTier.key).length;
+  const el=$('ly-stats'); if(!el)return;
+  el.innerHTML=`
+    <div class="stat"><div class="stat-ic ic-b">👥</div><div><div class="sv">${withPts.length}</div><div class="sl">Thành Viên Có Điểm</div></div></div>
+    <div class="stat"><div class="stat-ic ic-gd">⭐</div><div><div class="sv">${totalPts.toLocaleString()}</div><div class="sl">Tổng Điểm Lưu Hành</div></div></div>
+    <div class="stat"><div class="stat-ic ic-t">💎</div><div><div class="sv">${vip}</div><div class="sl">${maxTier.label}</div></div></div>
+    <div class="stat"><div class="stat-ic ic-r">🎂</div><div><div class="sv">${bdaySoon}</div><div class="sl">Sinh Nhật Sắp Tới</div></div></div>`;
+  // Tier distribution
+  const dist=$('ly-tier-dist'); if(!dist)return;
+  dist.innerHTML=LOYALTY_CFG.tiers.map(t=>{
+    const cnt=custs.filter(c=>getTier(c.totalPoints||0)?.key===t.key).length;
+    return`<div style="flex:1;min-width:100px;text-align:center;padding:14px 10px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border)">
+      <div style="font-size:22px;margin-bottom:4px">${t.label.split(' ')[0]}</div>
+      <div style="font-size:22px;font-weight:700;color:var(--ink)">${cnt}</div>
+      <div style="font-size:10px;color:var(--ink4);margin-top:2px">${t.label.split(' ').slice(1).join(' ')}</div>
+      <div style="font-size:9px;color:var(--ink4)">≥ ${t.min.toLocaleString()} đ</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLoyalty(){
+  const q=($('ly-q')?.value||'').toLowerCase();
+  const ft=$('ly-filter-tier')?.value||'';
+  let custs=Object.values(CUSTOMERS);
+  if(q) custs=custs.filter(c=>c.name.toLowerCase().includes(q)||c.phone.includes(q));
+  if(ft) custs=custs.filter(c=>getTier(c.totalPoints||0)?.key===ft);
+  custs.sort((a,b)=>(b.totalPoints||0)-(a.totalPoints||0));
+  const tb=$('ly-tbody'); if(!tb)return;
+  if(!custs.length){
+    tb.innerHTML=`<tr><td colspan="9"><div class="empty"><div class="empty-ico">📭</div><div class="empty-t">Không có thành viên</div></div></td></tr>`;return;
+  }
+  tb.innerHTML=custs.map(c=>{
+    const tp=c.totalPoints||0, cp=c.points||0;
+    const tier=getTier(tp);
+    const next=ptsToNextTier(tp);
+    // Progress to next tier
+    let pct=0;
+    if(tier&&next){
+      pct=Math.round((tp-tier.min)/(next.tier.min-tier.min)*100);
+    } else if(tier) pct=100;
+    const bdToday=isBdayToday(c.birthday);
+    const bdSoon=c.birthday&&isBdaySoon(c.birthday,LOYALTY_CFG.bdayBefore)&&!bdToday;
+    const bdDisplay=c.birthday
+      ? (bdToday?'<span class="bday-tag">🎂 Hôm nay!</span>'
+        :bdSoon?`<span style="color:var(--red);font-weight:600;font-size:11px">🎂 ${bdayStr(c.birthday)}</span>`
+        :`<span style="font-size:11px;color:var(--ink4)">🎂 ${bdayStr(c.birthday)}</span>`)
+      :'<span style="color:var(--ink4);font-size:11px">—</span>';
+    const ptsFill=tier?`<div class="pts-bar"><div class="pts-fill" style="width:${Math.min(100,pct)}%;background:${tier.fillColor||tier.color}"></div></div><div style="font-size:9px;color:var(--ink4)">${pct}% → ${next?next.tier.label:'Max'}</div>`:'';
+    const spent=c.tours.reduce((a,t)=>a+(t.spent||0),0);
+    return `<tr>
+      <td><div style="font-weight:600;font-size:13px">${c.name}</div><div style="font-size:10px;color:var(--ink4)">${c.note||''}</div></td>
+      <td><a href="tel:${c.phone}" style="color:var(--sky);font-size:12px">${c.phone}</a></td>
+      <td>${tierBadge(tp)}</td>
+      <td>
+        <div style="font-weight:700;font-size:14px">⭐ ${cp.toLocaleString()}</div>
+        ${ptsFill}
+      </td>
+      <td style="font-weight:600;color:var(--ink3);font-size:12px">${tp.toLocaleString()}</td>
+      <td style="font-weight:600;text-align:center">${c.tours.length}</td>
+      <td style="font-weight:600;color:var(--green)">${fM(spent)}</td>
+      <td>${bdDisplay}</td>
+      <td style="font-size:11px">
+        ${next?`<span style="color:var(--orange);font-weight:600">+${next.need.toLocaleString()} → ${next.tier.label}</span>`:'<span style="color:var(--teal);font-weight:700">🏆 Max!</span>'}
+        <div style="margin-top:4px"><button class="act" onclick="openPtsModal('${c.phone}')">⭐ Điều chỉnh</button></div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function openPtsModal(phone){
+  ACT_PHONE=phone;
+  const c=CUSTOMERS[phone]; if(!c)return;
+  $('pts-info').innerHTML=`<b style="font-size:14px">${c.name}</b> · <span style="color:var(--ink4)">${phone}</span>
+    <div style="display:flex;gap:10px;margin-top:9px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:13px">Điểm hiện tại: <b style="color:var(--gold)">⭐ ${(c.points||0).toLocaleString()}</b></span>
+      <span style="font-size:12px;color:var(--ink4)">Tổng tích lũy: ${(c.totalPoints||0).toLocaleString()}</span>
+      ${tierBadge(c.totalPoints||0)}
+    </div>`;
+  $('pts-amt').value=''; $('pts-reason').value=''; $('pts-type').value='add';
+  openModal('m-pts');
+}
+function savePoints(){
+  const c=CUSTOMERS[ACT_PHONE]; if(!c)return;
+  const type=$('pts-type').value, amt=+$('pts-amt').value, reason=$('pts-reason').value.trim();
+  if(!amt||amt<0){toast('Nhập số điểm hợp lệ','err');return}
+  if(type==='add') addPoints(ACT_PHONE,amt,reason||'Cộng thủ công','manual');
+  else if(type==='sub'){
+    if(amt>(c.points||0)){toast('Không đủ điểm để trừ','err');return}
+    addPoints(ACT_PHONE,-amt,reason||'Đổi quà','redeem');
+  } else {
+    c.points=amt;
+    (c.pointsHistory=c.pointsHistory||[]).unshift({
+      date:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),
+      desc:reason||'Đặt điểm cố định',delta:amt,type:'set'
+    });
+  }
+  closeModal('m-pts'); renderLoyalty(); renderLoyaltyStats();
+  toast(`✅ Cập nhật điểm cho ${c.name}`);
+}
+function exportLoyalty(){
+  const rows=Object.values(CUSTOMERS).sort((a,b)=>(b.totalPoints||0)-(a.totalPoints||0)).map(c=>{
+    const spent=c.tours.reduce((a,t)=>a+(t.spent||0),0);
+    return[c.phone,c.name,c.email||'',c.birthday||'',getTier(c.totalPoints||0)?.label||'—',c.points||0,c.totalPoints||0,c.tours.length,spent];
+  });
+  dlCSV([['SĐT','Tên','Email','Sinh Nhật','Hạng','Điểm Hiện Tại','Tổng Điểm','Số Tour','Chi Tiêu'],...rows],'loyalty_members.csv');
+  toast('📥 Xuất thành viên xong');
+}
+
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function renderSettings(){
+  const r=$('set-rate'); if(!r)return;
+  r.value=LOYALTY_CFG.rate;
+  $('set-bday-pts').value=LOYALTY_CFG.bdayPts;
+  $('set-ref-pts').value=LOYALTY_CFG.refPts;
+  $('set-bday-before').value=LOYALTY_CFG.bdayBefore;
+  $('set-bday-msg').value=LOYALTY_CFG.bdayMsg;
+  updateSettingsExample();
+  // Tier config
+  $('tier-config-list').innerHTML=LOYALTY_CFG.tiers.map((t,i)=>`
+    <div class="tier-config-row">
+      <span class="tier tier-${t.key}" style="min-width:110px;flex-shrink:0">${t.label}</span>
+      <span style="font-size:11px;color:var(--ink4);white-space:nowrap">Từ</span>
+      <input type="number" id="tc-min-${i}" value="${t.min}" min="0" style="width:90px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:inherit;text-align:center">
+      <span style="font-size:11px;color:var(--ink4);white-space:nowrap">điểm tích lũy · Quyền lợi:</span>
+      <input type="text" id="tc-ben-${i}" value="${t.benefit}" style="flex:1;min-width:150px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit" placeholder="Quyền lợi...">
+    </div>`).join('');
+  // Benefits preview
+  $('tier-benefits').innerHTML=LOYALTY_CFG.tiers.map(t=>`
+    <div style="padding:13px;background:var(--bg);border-radius:var(--r);border:1px solid var(--border)">
+      <div class="tier tier-${t.key}" style="margin-bottom:8px">${t.label}</div>
+      <div style="font-size:11px;color:var(--ink3);line-height:1.7">${t.benefit}</div>
+      <div style="font-size:10px;color:var(--ink4);margin-top:5px">≥ ${t.min.toLocaleString()} điểm</div>
+    </div>`).join('');
+}
+function updateSettingsExample(){
+  const rate=+($('set-rate')?.value||10000);
+  const ex=$('set-example');
+  if(ex) ex.textContent=`${Math.floor(5500000/rate).toLocaleString()} điểm`;
+}
+function resetTierDefaults(){
+  LOYALTY_CFG.tiers=[
+    {key:'diamond',label:'💎 Diamond',min:5000,color:'#0891B2',fillColor:'linear-gradient(90deg,#22D3EE,#0891B2)',benefit:'Giảm 15% + VIP lounge + quà tặng cao cấp'},
+    {key:'platinum',label:'💜 Platinum',min:2000,color:'#7C3AED',fillColor:'linear-gradient(90deg,#A78BFA,#7C3AED)',benefit:'Giảm 10% + ưu tiên đặt chỗ + quà tặng'},
+    {key:'gold',label:'🥇 Gold',min:1000,color:'#D97706',fillColor:'linear-gradient(90deg,#FCD34D,#D97706)',benefit:'Giảm 7% + check-in ưu tiên'},
+    {key:'silver',label:'🥈 Silver',min:500,color:'#64748B',fillColor:'linear-gradient(90deg,#CBD5E1,#64748B)',benefit:'Giảm 5% mọi tour'},
+    {key:'bronze',label:'🥉 Bronze',min:1,color:'#B45309',fillColor:'linear-gradient(90deg,#FDE68A,#B45309)',benefit:'Giảm 3% tour tiếp theo'},
+  ];
+  renderSettings(); toast('✅ Đã khôi phục mặc định');
+}
+function saveSettings(){
+  LOYALTY_CFG.rate=+$('set-rate').value||10000;
+  LOYALTY_CFG.bdayPts=+$('set-bday-pts').value||200;
+  LOYALTY_CFG.refPts=+$('set-ref-pts').value||100;
+  LOYALTY_CFG.bdayBefore=+$('set-bday-before').value||7;
+  LOYALTY_CFG.bdayMsg=$('set-bday-msg').value;
+  LOYALTY_CFG.tiers.forEach((t,i)=>{
+    const mi=$('tc-min-'+i), be=$('tc-ben-'+i);
+    if(mi) t.min=+mi.value||t.min;
+    if(be) t.benefit=be.value;
+  });
+  // Re-sort tiers by min desc
+  LOYALTY_CFG.tiers.sort((a,b)=>b.min-a.min);
+  renderSettings(); toast('💾 Đã lưu cài đặt!');
+}
+
+// ══════════════════════════════════════════════════
+// MISC
+// ══════════════════════════════════════════════════
+function refreshSaleDD(){
+  const sales=USERS.filter(u=>u.role==='sale'&&u.status==='active');
+  const opts=sales.map(u=>`<option>${u.name}</option>`).join('');
+  const fs=$('f-sale'), af=$('af-sale');
+  if(fs)fs.innerHTML=opts;
+  if(af)af.innerHTML='<option value="">Tất cả Sale</option>'+opts;
+}
+
+// Close modals + notif on backdrop click
+document.addEventListener('click', function(e){
+  // Close notif
+  if(!e.target.closest('.bell-wrap'))$('notif-p').classList.remove('on');
+  // Close logout box
+  if(!e.target.closest('.user-pill')&&!e.target.closest('#lout-box'))hideLogout();
+  // Close overlays on backdrop
+  if(e.target.classList.contains('overlay'))e.target.classList.remove('on');
+});
+
+// Enter key login
+document.getElementById('li-p').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+document.getElementById('li-u').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin()});
+
+// Delete button
+document.getElementById('del-btn').addEventListener('click', armDelete);
+
+// File upload
+document.getElementById('mkt-file').addEventListener('change',function(e){handleFile(e.target.files[0])});
+const uz=document.getElementById('upload-zone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag')});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
+uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag');handleFile(e.dataTransfer.files[0])});
+
+// Phone check in new lead
+document.getElementById('f-phone').addEventListener('input',function(){checkOld(this.value)});
+</script>
+</body>
+</html>
