@@ -1763,8 +1763,6 @@ function saveLead(){
     remindDate:null,resale:[],
     note:$('f-note').value.trim()
   });
-  // Tạo/cập nhật customer record
-  ensureCustomer(LEADS[0]);
   // Bắn ZNS noti cho sale phụ trách
   sendZNSNewLead(LEADS[0]);
   // Browser push notification
@@ -1814,14 +1812,21 @@ function saveEdit(){
     tourPrice:tp,salePrice:sp,note:$('e-note').value.trim()});
   if(l.status==='Đã chốt'){
     l.value=+$('e-val').value||sp*l.pax;l.paid=+$('e-paid').value||0;
-    // Cộng điểm tự động khi chốt (nếu chưa cộng)
+    // Tạo thành viên + cộng điểm khi chốt
+    ensureCustomer(l);
     if(!l._pointsAwarded){
-      ensureCustomer(l);
       const pts=ptsToEarn(l.value||sp*l.pax);
       if(pts>0){addPoints(l.phone,pts,l.tour,'earn');l._pointsAwarded=true;}
     }
+    // Lưu tour vào lịch sử thành viên
+    const c=CUSTOMERS[l.phone];
+    if(c && !c.tours.find(t=>t.name===l.tour && t.date===l.depdate)){
+      c.tours.push({name:l.tour, date:l.depdate||'', spent:l.value||0});
+    }
   }
-  if(l.birthday) ensureCustomer(l);
+  // Chỉ cập nhật birthday nếu đã là thành viên rồi
+  if(l.birthday && CUSTOMERS[l.phone])
+    CUSTOMERS[l.phone].birthday = l.birthday;
   closeModal('m-edit-lead');
   if($('page-detail').classList.contains('on'))openDetail(ACT_LEAD);
   renderLeads(); renderStats();
@@ -1916,15 +1921,24 @@ function saveStatus(){
   const prevStatus=l.status;
   l.status=$('s-status').value;
 
-  // Chốt deal
+  // Chốt deal → tạo thành viên
   if(l.status==='Đã chốt'){
     l.value=+$('s-val').value||l.salePrice*(l.pax||1)||0;
     l.paid=+$('s-paid').value||0;
+    // Tạo hồ sơ thành viên khi chốt lần đầu
+    ensureCustomer(l);
+    const c=CUSTOMERS[l.phone];
     if(!l._pointsAwarded){
-      ensureCustomer(l);
       const pts=ptsToEarn(l.value);
-      if(pts>0){addPoints(l.phone,pts,l.tour,'earn');l._pointsAwarded=true;
-        toast(`⭐ Cộng ${pts} điểm cho ${l.name}!`);}
+      if(pts>0){
+        addPoints(l.phone,pts,l.tour,'earn');
+        l._pointsAwarded=true;
+        toast(`⭐ Cộng ${pts} điểm cho ${l.name}!`);
+      }
+    }
+    // Lưu tour vào lịch sử thành viên
+    if(c && !c.tours.find(t=>t.name===l.tour && t.date===l.depdate)){
+      c.tours.push({name:l.tour, date:l.depdate||'', spent:l.value||0});
     }
     // Push notification chốt deal
     if(prevStatus!=='Đã chốt') PUSH.dealClosed(l);
@@ -2935,26 +2949,26 @@ async function testZNS(){
   }
 }
 
-// Gửi ZNS khi có lead mới (sẽ active khi có token + template)
+// Make.com webhook — gửi ZNS qua Make
+const MAKE_WEBHOOK = 'https://hook.eu1.make.com/rcao5tkjc7vdf65wfjsb4mjr62nnqn9y';
+
 async function sendZNSNewLead(lead){
-  if(!ZNS_CFG.token||!ZNS_CFG.templates.lead) return;
-  const sale=USERS.find(u=>u.name===lead.sale);
-  if(!sale?.zalo) return;
+  const sale = USERS.find(u => u.name === lead.sale);
+  if(!sale) return;
   try {
-    await fetch('https://business.openapi.zalo.me/message/template',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','access_token':ZNS_CFG.token},
-      body:JSON.stringify({
-        phone:sale.zalo,
-        template_id:ZNS_CFG.templates.lead,
-        template_data:{
-          sale_name:sale.name,
-          customer_name:lead.name,
-          phone:lead.phone,
-          tour:lead.tour,
-          source:lead.source||'—'
-        },
-        tracking_id:'lead_'+lead.id
+    await fetch(MAKE_WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type: 'new_lead',
+        phone: sale.zalo || sale.phone || '',
+        sale_name: sale.name,
+        customer_name: lead.name,
+        customer_phone: lead.phone,
+        tour: lead.tour,
+        note: lead.note || '—',
+        id: lead.id,
+        source: lead.source || '—'
       })
     });
   } catch(e){}
