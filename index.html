@@ -615,7 +615,7 @@ tbody tr:hover td{background:#FAFCFF}
 
     <!-- ─── DASHBOARD ─── -->
     <div class="page" id="page-dashboard">
-      <div class="ph"><div><div class="ph-title">Dashboard Vitgia</div><div class="ph-sub">Tổng quan hiệu suất</div></div></div>
+      <div class="ph"><div><div class="ph-title">Dashboard Vitgia</div><div class="ph-sub">Tổng quan hiệu suất</div></div><div class="ph-acts"><select class="tour-sel" id="db-month" onchange="renderDashboard()" style="font-size:12px;padding:6px 28px 6px 11px"><option value="">Tất cả tháng</option></select></div></div>
       <div class="stats-row">
         <div class="stat"><div class="stat-ic ic-b">📋</div><div><div class="sv" id="db-tot">0</div><div class="sl">Tổng Lead</div></div></div>
         <div class="stat"><div class="stat-ic ic-g">✅</div><div><div class="sv" id="db-chot">0</div><div class="sl">Đã Chốt</div></div></div>
@@ -969,11 +969,11 @@ tbody tr:hover td{background:#FAFCFF}
       </div>
       <div class="fg" id="f-company-wrap" style="display:none"><label>Tên Công Ty / Đại Lý</label><input id="f-company" placeholder="Công ty TNHH ABC"></div>
       <div class="fg fc2"><label>Tour Quan Tâm</label>
-        <select id="f-tour" onchange="autoPrice('f-tour','f-tp')">
-          <option>Tour Đà Lạt 3N2Đ</option><option>Tour Phú Quốc 4N3Đ</option>
-          <option>Tour Hội An 2N1Đ</option><option>Tour Sapa 3N2Đ</option>
-          <option>Tour Nha Trang 4N3Đ</option><option>Tour Hạ Long 3N2Đ</option>
-        </select>
+        <select id="f-tour" onchange="onTourChange()"></select>
+      </div>
+      <div class="fg fc2" id="f-tour-custom-wrap" style="display:none">
+        <label>Tên Tour Mới <span style="color:var(--sky);font-size:10px">(nhập tay)</span></label>
+        <input id="f-tour-custom" placeholder="VD: Tour Trung Quốc 5N4Đ">
       </div>
       <div class="fg"><label>Công Ty Tổ Chức</label>
         <select id="f-organizer">
@@ -1732,17 +1732,52 @@ function checkOld(phone){
     box.innerHTML=`<b style="color:var(--purple)">✅ Khách cũ</b> — Đã đi: ${c.tours.map(t=>t.name).join(', ')}`;
   } else box.style.display='none';
 }
+function populateTourSelect(selId, currentVal){
+  const sel=$(selId); if(!sel) return;
+  const cu = USERS.find(u=>u.id===CU?.id);
+  // Admin sees all tours; sale sees assigned tours + "Tour khác"
+  let tours = Object.keys(TOUR_P);
+  if(cu?.role==='sale' && cu.tours?.length){
+    // Show assigned tours first, then all others greyed, then custom
+    const assigned = cu.tours;
+    const others = tours.filter(t=>!assigned.includes(t));
+    sel.innerHTML =
+      assigned.map(t=>`<option value="${t}">${t}</option>`).join('')+
+      (others.length?`<optgroup label="── Tour khác ──">`+others.map(t=>`<option value="${t}">${t}</option>`).join('')+'</optgroup>':'')+
+      `<option value="__custom__">✏️ Tour khác (nhập tay)...</option>`;
+  } else {
+    sel.innerHTML = tours.map(t=>`<option value="${t}">${t}</option>`).join('')+
+      `<option value="__custom__">✏️ Tour khác (nhập tay)...</option>`;
+  }
+  if(currentVal) sel.value = currentVal;
+}
+
+function onTourChange(){
+  const val=$('f-tour').value;
+  $('f-tour-custom-wrap').style.display = val==='__custom__'?'':'none';
+  if(val!=='__custom__') autoPrice('f-tour','f-tp');
+  else { $('f-tp').value=''; }
+}
+
 function openNewLead(){
-  ['f-name','f-email','f-note','f-tp','f-sp','f-company'].forEach(i=>{const el=$(i);if(el)el.value=''});
+  ['f-name','f-email','f-note','f-tp','f-sp','f-company','f-tour-custom'].forEach(i=>{const el=$(i);if(el)el.value=''});
   $('f-phone').value=''; $('f-src').value='Facebook'; $('f-ctype').value='Cá nhân';
   $('f-organizer').value='HanoiSkyTours'; $('f-pax').value=1; $('f-depdate').value='';
-  $('f-tour').value='Tour Đà Lạt 3N2Đ'; autoPrice('f-tour','f-tp');
+  $('f-tour-custom-wrap').style.display='none';
+  populateTourSelect('f-tour');
+  autoPrice('f-tour','f-tp');
   $('f-company-wrap').style.display='none'; $('f-old-info').style.display='none';
   openModal('m-new-lead');
 }
 function saveLead(){
   const name=$('f-name').value.trim(), phone=$('f-phone').value.trim();
   if(!name||!phone){toast('Nhập tên và SĐT','err');return}
+  // Handle custom tour
+  let tourVal = $('f-tour').value;
+  if(tourVal==='__custom__'){
+    tourVal = ($('f-tour-custom')?.value||'').trim();
+    if(!tourVal){toast('Nhập tên tour mới','err');return}
+  }
   const tp=+$('f-tp').value||0, sp=+$('f-sp').value||tp;
   const newId='L'+String(LEADS.length+1).padStart(3,'0');
   const bd=$('f-birthday').value||'';
@@ -1750,7 +1785,7 @@ function saveLead(){
     id:newId,
     date:new Date().toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'}),
     name,phone,email:$('f-email').value.trim(),
-    tour:$('f-tour').value,source:$('f-src').value,
+    tour:tourVal,source:$('f-src').value,
     sale:CU?.type==='chat'?'':$('f-sale').value,
     status:'Tiềm năng',
     ctype:$('f-ctype').value,
@@ -2147,19 +2182,46 @@ function renderReminders(){
 // ══════════════════════════════════════════════════
 // DASHBOARD
 // ══════════════════════════════════════════════════
+function getDashboardLeads(){
+  const mo = $('db-month')?.value||'';
+  if(!mo) return LEADS;
+  const [mm,yy] = mo.split('/');
+  return LEADS.filter(l=>{
+    if(!l.date) return false;
+    const p=l.date.split('/');
+    return p[1]===mm && p[2]===yy;
+  });
+}
+
+function populateDbMonths(){
+  const sel=$('db-month'); if(!sel) return;
+  const cur=sel.value;
+  const months=[...new Set(LEADS.map(l=>{
+    if(!l.date) return null;
+    const p=l.date.split('/'); return p.length>=3?p[1]+'/'+p[2]:null;
+  }).filter(Boolean))].sort((a,b)=>{
+    const [ma,ya]=a.split('/'), [mb,yb]=b.split('/');
+    return (ya-yb)||ma-mb;
+  });
+  sel.innerHTML='<option value="">Tất cả tháng</option>'+
+    months.map(m=>`<option value="${m}"${m===cur?' selected':''}>Tháng ${m}</option>`).join('');
+}
+
 function renderDashboard(){
-  const total=LEADS.length, chot=LEADS.filter(l=>l.status==='Đã chốt');
+  populateDbMonths();
+  const FILT=getDashboardLeads();
+  const total=FILT.length, chot=FILT.filter(l=>l.status==='Đã chốt');
   const rate=total?Math.round(chot.length/total*100):0;
   const rev=chot.reduce((a,l)=>a+(l.paid||0),0);
-  const corp=LEADS.filter(l=>l.ctype==='Khách Công Ty').length;
-  const agcy=LEADS.filter(l=>l.ctype==='Khách Đại Lý').length;
+  const corp=FILT.filter(l=>l.ctype==='Khách Công Ty').length;
+  const agcy=FILT.filter(l=>l.ctype==='Khách Đại Lý').length;
   $('db-tot').textContent=total; $('db-chot').textContent=chot.length;
   $('db-rate').textContent=rate+'%'; $('db-rev').textContent=fM(rev);
   $('db-corp').textContent=corp; $('db-agency').textContent=agcy;
 
   // Bar chart
   const tours=Object.keys(TOUR_P).map(t=>t.replace('Tour ','').split(' ')[0]);
-  const vals=Object.keys(TOUR_P).map(t=>LEADS.filter(l=>l.tour===t).length);
+  const vals=Object.keys(TOUR_P).map(t=>FILT.filter(l=>l.tour===t).length);
   const mx=Math.max(...vals,1);
   $('chart-bars').innerHTML=tours.map((t,i)=>`<div class="bc">
     <div class="bv">${vals[i]}</div>
@@ -2169,7 +2231,7 @@ function renderDashboard(){
   // Funnel
   const funnel=[
     {l:'Tổng Lead',n:total,p:100,c:'#0EA5E9'},
-    {l:'Đang TV',n:LEADS.filter(l=>l.status==='Đang tư vấn').length,p:total?Math.round(LEADS.filter(l=>l.status==='Đang tư vấn').length/total*100):0,c:'#D97706'},
+    {l:'Đang TV',n:FILT.filter(l=>l.status==='Đang tư vấn').length,p:total?Math.round(FILT.filter(l=>l.status==='Đang tư vấn').length/total*100):0,c:'#D97706'},
     {l:'Đã Chốt',n:chot.length,p:rate,c:'#059669'}
   ];
   $('chart-funnel').innerHTML=funnel.map(f=>`<div class="funnel-row">
@@ -2177,13 +2239,14 @@ function renderDashboard(){
     <div class="ft"><div class="ff" style="width:${f.p}%;background:${f.c}">${f.p}%</div></div>
     <div class="fnn">${f.n}</div></div>`).join('');
 
-  // Sale table
+  // Sale table — filter by month per sale
   const names=[...new Set(LEADS.map(l=>l.sale).filter(Boolean))];
   $('sale-tbl').innerHTML=names.map(s=>{
-    const my=LEADS.filter(l=>l.sale===s), ch=my.filter(l=>l.status==='Đã chốt');
+    const my=FILT.filter(l=>l.sale===s), ch=my.filter(l=>l.status==='Đã chốt');
     const r=my.length?Math.round(ch.length/my.length*100):0;
     const hd=ch.reduce((a,l)=>a+(l.value||l.salePrice*l.pax||0),0);
     const ds=ch.reduce((a,l)=>a+(l.paid||0),0);
+    if(!my.length) return '';
     return `<tr><td style="font-weight:600">${s}</td><td>${my.length}</td><td>${my.filter(l=>l.status==='Đang tư vấn').length}</td><td><span class="badge bg">${ch.length}</span></td>
     <td style="font-weight:700;color:var(--green)">${r}%</td><td style="font-weight:700;color:var(--sky)">${fM(hd)}</td><td style="font-weight:700;color:var(--gold)">${fM(ds)}</td><td style="font-weight:700;color:var(--orange)">${fM(Math.max(0,hd-ds))}</td></tr>`;
   }).join('');
